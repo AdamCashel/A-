@@ -1,6 +1,10 @@
 
 
 
+void h1_value();
+
+void g_value();
+
 void CreateTable();
 
 void ET();

@@ -1,4 +1,3 @@
-#include "Calculation.h"
 #include "Heuristic.h"
 #include <string>
 #include <iostream>
