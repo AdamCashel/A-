@@ -12,8 +12,6 @@ bool check_goal(Board, Board);
 
 int h1_value(Board);
 
-void createGoalBoard();
-
 int g_value(Board);
 
 Board createBoard(Board);
