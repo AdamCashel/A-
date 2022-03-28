@@ -1,5 +1,7 @@
+#include "Board.h"
+#include "Tile.h"
 
-
+bool check_goal(Board, Board);
 
 void h1_value();
 

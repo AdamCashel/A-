@@ -1,2 +1,7 @@
 #include "Calculation.h"
-#include "Tile.h"
+
+
+
+bool check_goal(Board treeBoard, Board goalBoard){
+    
+}

@@ -30,3 +30,15 @@ Board* Board::getChild(int index){
 vector<Board*> Board::getChildren(){
     return children;
 }
+
+void Board::setFn(int FnVal){
+    Fn_Value = FnVal;
+}
+
+int Board::getFn(){
+    return Fn_Value;
+}
+
+Tile* Board::getBoardArray(){
+    return board;
+}
