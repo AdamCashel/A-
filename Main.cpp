@@ -4,6 +4,11 @@
 #include <iostream>
 #include <vector>
 
+std::vector<int> OPEN;
+
+std::vector<int> CLOSED;
+
+
 
 void createBoard1()
 {
@@ -83,16 +88,12 @@ void createBoard2()
     t1.setGoalPosition(9);
 }
 
-std::vector<int> OPEN;
-
-std::vector<int> CLOSED;
-
 void AStarAlgorithm()
 {
     //Start of A*
 
     //(1) Start with OPEN containing only the initial node
-    
+    OPEN =
 
     //(2) Until a goal node is found, repeat the following procudure
         
