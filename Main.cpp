@@ -133,9 +133,31 @@ void AStarAlgorithm(Board initial_board, void (*heuristic))
     created between the initial state and BESTNODE if we are interested in the path). Otherwise, generate the successors of BESTNODE. 
     For each such SUCCESSOR, do the following:
     */
-        While(!Goal_Node){
+        while(!Goal_Node){
+
+        //If there are no nodes on OPEN, report failure. 
+        if(OPEN.empty())
+        {
+            std::cout << "FAILURE" << std::endl;
+            return;
+        }
+
+        //Otherwise, pick the node on OPEN with the lowest f’ value. Call it BESTNODE.
+        BESTNODE = 
+
+        //Remove it from OPEN.
+
+
+        //Place it on CLOSED.
+
+
+        //See if BESTNODE is a goal node.  If so, exit and report a solution (either BESTNODE if all we want is the 
+        //node or the path that has been created between the initial state and BESTNODE if we are interested in the path)
+
+        
+        //Otherwise, generate the successors of BESTNODE. For each such SUCCESSOR, do the following:
         //(a) Set BESTNODE to point to SUCCESSOR
-        BESTNODE.
+        BESTNODE.setChild(SUCCESSOR,1);
 
         //(b) Compute g(SUCCESSOR) = g(BESTNODE) + the cost of getting from BESTNODE to SUCCESSOR and f'(SUCCESSOR) + h(SUCCESSOR)
 
