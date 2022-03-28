@@ -30,8 +30,12 @@ int g_value(Board){
 
 }
 
-Board creatBoard(Board){
+Board createBoard(Board){
 
+}
+
+int lowest_fvalue(){
+    
 }
 
 void CreateTable(double, int, int, int, double, int, int){
