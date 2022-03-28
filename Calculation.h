@@ -1,22 +1,36 @@
 #include "Board.h"
 #include "Tile.h"
+#include <time.h>
+
+Board goalBoard;
+
+int statistics_table[6][6];
+
+clock_t timer;
 
 bool check_goal(Board, Board);
 
-void h1_value();
+int h1_value(Board);
 
-void g_value();
+void createGoalBoard();
 
-void CreateTable();
+int g_value(Board);
 
-void ET();
+Board creatBoard(Board);
 
-void NG();
+//ET, NG, NE, D, bStar, TP, Number of Run
+void CreateTable(double, int, int, int, double, int, int);
 
-void NE();
+void ET_Start();
 
-void D();
+double ET_End();
 
-void bStar();
+int NG(Board);
 
-void TP();
+int NE();
+
+int D();
+
+double bStar();
+
+int TP();
