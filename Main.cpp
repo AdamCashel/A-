@@ -143,7 +143,7 @@ void AStarAlgorithm(Board initial_board, void (*heuristic))
         }
 
         //Otherwise, pick the node on OPEN with the lowest f’ value. Call it BESTNODE.
-        BESTNODE = 
+        BESTNODE = lowest_fvalue(OPEN);
 
         //Remove it from OPEN.
 
