@@ -26,7 +26,7 @@ class Board{
         void setFn(int);
         int getFn();
 
-        // bool operator==(const Board);
+        const bool operator==(const Board);
 
         Tile* getBoardArray();
         
