@@ -38,10 +38,16 @@ void Board::setFn(int FnVal){
     Fn_Value = FnVal;
 }
 
-// bool operator==(const Board &temp1, const Board &temp2)
-// {
-//     return(temp1.getBoardArray() == temp2.getBoard());
-// }
+const bool operator==(Board &board1, Board &board2) 
+{
+    for(int i = 0; i < BOARD_SIZE; i++){
+        if(board1.getBoardArray()[i].currentPosition() != board2.getBoardArray()[i].currentPosition()){
+            return false;
+        }
+    }
+    
+    return true;
+}
 
 int Board::getFn(){
     return Fn_Value;
