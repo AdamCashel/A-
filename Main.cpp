@@ -79,7 +79,7 @@ void AStarAlgorithm(Board initial_board, void(*heuristic))
 
             //(b) Compute g(SUCCESSOR) = g(BESTNODE) + the cost of getting from BESTNODE to SUCCESSOR and f'(SUCCESSOR) + h(SUCCESSOR)
             //Or use a certain heurisitc function
-           
+           SUCCESSOR.setFn(heurisitc(SUCCESSOR));
             //(i) See if SUCCESSOR is the same as any node on OPEN
             /*(i.e., It has already been generated but not processed). If so, call that node OLD. Since this node already exists in the graph,
             we can throw SUCCESSOR away and add OLD to the list of BESTNODE's successors. Now we must decide whether OLD's parent link should
