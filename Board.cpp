@@ -3,6 +3,9 @@
 
 using namespace std;
 
+Board::Board(){};
+
+
 void Board::setTile(Tile tile, int index){
     board[index] = tile;
 }

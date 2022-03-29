@@ -1,6 +1,8 @@
 #include "Tile.h"
 #include <vector>
 
+extern const int BOARD_SIZE = 9;
+
 class Board{
     private:
         Tile board[9];
@@ -9,6 +11,8 @@ class Board{
         int Fn_Value;
 
     public:
+        Board();
+
         void setTile(Tile, int);
         Tile getTile(int);
 
