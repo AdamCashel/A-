@@ -48,7 +48,7 @@ void AStarAlgorithm(Board initial_board, void (*heuristic))
         BESTNODE = lowest_fvalue(OPEN);
 
         //Remove it from OPEN.
-
+        
 
         //Place it on CLOSED.
 
