@@ -8,6 +8,8 @@ int statistics_table[6][6];
 
 clock_t timer;
 
+void getGoalPath(Board);
+
 bool check_goal(Board, Board);
 
 int h1_value(Board);

@@ -3,6 +3,18 @@
 #include <vector>
 #include <time.h>
 
+
+void getGoalPath(Board found_goal)
+{
+    std::vector<Board> Path;
+    while(!found_goal.getParent() != NULL)
+    {
+        Path.push_back(found_goal);
+        found_goal = found_goal.getParent();
+    }
+}
+
+
 //Checks if Board node is goal node through the comparision of board array
 bool check_goal(Board treeBoard, Board goalBoard){
     if(treeBoard.getBoardArray() == goalBoard.getBoardArray()){
@@ -44,7 +56,7 @@ Board lowest_fvalue(vector<Board> open_array){
         }
     }
     
-    open_array.erase(next(open_array.at(index)));
+    open_array.erase(std::next(open_array.begin(), index));
     return temp;
 }
 
