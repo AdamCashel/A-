@@ -1,5 +1,6 @@
 #include "Tile.h"
 #include <vector>
+#pragma once
 
 extern const int BOARD_SIZE = 9;
 
@@ -25,9 +26,7 @@ class Board{
         void setFn(int);
         int getFn();
 
-        Board::~Board(){}
-
-        bool operator==(const Board);
+        // bool operator==(const Board);
 
         Tile* getBoardArray();
         
