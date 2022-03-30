@@ -5,6 +5,15 @@ using namespace std;
 
 Board::Board(){};
 
+Board::Board(const Board* otherBoard){
+    for(int i = 0; i < BOARD_SIZE; i++){
+        board[i] = otherBoard->board[i];
+    }
+
+    children = otherBoard->children;
+    Fn_Value = otherBoard->Fn_Value;
+}
+
 
 void Board::setTile(Tile tile, int index){
     board[index] = tile;
