@@ -69,6 +69,7 @@ void generateSuccessors(Board* BESTNODE){
     for(int attempt = 0; attempt < 4; attempt++){
 
         Board* newSuccessor(BESTNODE);
+        newSuccessor->setParent(BESTNODE);
 
         switch (attempt){
         case 0:
@@ -121,6 +122,16 @@ void generateSuccessors(Board* BESTNODE){
     }
 }
 
+
+void reorderByFn(vector<Board> list){
+    for(int i = 0; i < list.size(); i++){
+        for(int j = i + 1; j < list.size(); j++){
+            if(list[i].getFn() > list[j].getFn()){
+                swap(list[i], list[j]);
+            }
+        }
+    }
+}
 
 void CreateTable(double, int, int, int, double, int, int){
 
