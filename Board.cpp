@@ -3,7 +3,11 @@
 
 using namespace std;
 
-Board::Board(){};
+Board::Board(){
+    parent = nullptr;
+    Fn_Value = 0;
+    g_value = 0;
+};
 
 Board::Board(const Board* otherBoard){
     for(int i = 0; i < BOARD_ROWS; i++){
@@ -14,6 +18,7 @@ Board::Board(const Board* otherBoard){
 
     children = otherBoard->children;
     Fn_Value = otherBoard->Fn_Value;
+    g_value = otherBoard->g_value;
 }
 
 
@@ -55,6 +60,14 @@ void Board::setFn(int FnVal){
 
 int Board::getFn(){
     return Fn_Value;
+}
+
+void Board::setG(int gValue){
+    g_value = gValue;
+}
+
+int Board::getG(){
+    return g_value;
 }
 
 const bool operator==(Board &board1, Board &board2) 

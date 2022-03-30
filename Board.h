@@ -12,6 +12,7 @@ class Board{
         Board* parent;
         vector<Board*> children;
         int Fn_Value;
+        int g_value;
 
     public:
         Board();
@@ -31,6 +32,9 @@ class Board{
 
         void setFn(int);
         int getFn();
+
+        void setG(int);
+        int getG();
 
         const bool operator==(Board);
         
