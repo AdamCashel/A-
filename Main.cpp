@@ -17,8 +17,10 @@ Board SUCCESSOR;
 Board board1;
 Board board2;
 
-void AStarAlgorithm(Board initial_board, void(*heuristic))
+void AStarAlgorithm(Board initial_board, void(*heuristic)(Board*))
 {
+    int gValue = 0;
+
     // Start of A*
 
     //(1) Start with OPEN containing only the initial node
@@ -74,14 +76,19 @@ void AStarAlgorithm(Board initial_board, void(*heuristic))
         else
         {
             // Otherwise, generate the successors of BESTNODE. For each such SUCCESSOR, do the following:
-            // TODO:
-            //      generate successors
+            generateSuccessors(&BESTNODE);
             //(a) Set BESTNODE to point to SUCCESSOR
-            BESTNODE.setChild(&SUCCESSOR, 1);
+            BESTNODE.setChild(&SUCCESSOR, 0);
 
             //(b) Compute g(SUCCESSOR) = g(BESTNODE) + the cost of getting from BESTNODE to SUCCESSOR and f'(SUCCESSOR) + h(SUCCESSOR)
             //Or use a certain heurisitc function
-           SUCCESSOR.setFn(heurisitc(&SUCCESSOR));
+            // heuristic function will calculate the Fn value and set it in the SUCCESSOR
+            heuristic(&SUCCESSOR);
+
+
+            int index = 0;
+            bool foundInOpenList = false;
+            bool foundInClosedList = false;
             //(i) See if SUCCESSOR is the same as any node on OPEN
             /*(i.e., It has already been generated but not processed). If so, call that node OLD. Since this node already exists in the graph,
             we can throw SUCCESSOR away and add OLD to the list of BESTNODE's successors. Now we must decide whether OLD's parent link should
@@ -91,7 +98,37 @@ void AStarAlgorithm(Board initial_board, void(*heuristic))
             is cheaper, then reset OLD's parent link to point to BESTNODE, record the new cheaper path in g(OLD), and update f’(OLD). Add SUCCESSOR
             to open and re-oder open on the bases of f values.
             */
+            
+            for(index = 0; index < OPEN.size(); index++){
+                if(SUCCESSOR == OPEN[index]){
+                    // add the old node in open that is the same as the successor to the list of BESTNODE's successors
+                    foundInOpenList = true;
+                }
+            }
 
+            if(foundInOpenList){
+                BESTNODE.addChild(&OPEN[index]);
+
+                if(OPEN[index].getFn() <= SUCCESSOR.getFn()){
+                    continue;
+                }
+                else{
+                    // reset OLD's parent link to BESTNODE
+                    OPEN[index].setParent(&BESTNODE);
+
+                    // TODO: record the new cheaper path
+                    OPEN[index].setG(SUCCESSOR.getG());
+
+                    // update f-value
+                    heuristic(&OPEN[index]);
+
+                    // add successor to open list
+                    OPEN.push_back(SUCCESSOR);
+
+                    reorderByFn(OPEN);
+                }
+                break;
+            }
             //(ii) If SUCCESSOR was not on OPEN, see if it is on CLOSED
             /*If so, call the node on CLOSED OLD and add OLD to the list of BESTNODE's successors. Check to see if the new path or the old path is
             better. If OLD’s path is better, Ignore the SUCCESSOR.; otherwise, just as in step 2(c), and set the parent link-and g and f’ values
@@ -106,12 +143,22 @@ void AStarAlgorithm(Board initial_board, void(*heuristic))
             may stop here. But it is possible that with the new value of g being propagated downward, the path we are following may become better than the
             path through the current parent. So, compare the two. If the path through the current parent is still better, stop the propagation. If the path
             we are propagating through is now better, reset the parent and continue propagation.
-
             */
+            for(index = 0; index < CLOSED.size(); index++){
+                if(SUCCESSOR == CLOSED[index]){
+                    // add the old node in open that is the same as the successor to the list of BESTNODE's successors
+                    foundInClosedList = true;
+                }
+            }
 
             //(iii) If SUCCESSOR was not already on either OPEN or CLOSED
             /*Point SUCCESSOR to BESTNODE and put it on OPEN. Re-order states on OPEN by f values.
              */
+            if(!foundInOpenList && !foundInClosedList){
+                SUCCESSOR.setParent(&BESTNODE);
+                OPEN.push_back(SUCCESSOR);
+                reorderByFn(OPEN);
+            }
         }
     }
 }
