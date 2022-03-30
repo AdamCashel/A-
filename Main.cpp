@@ -12,7 +12,7 @@ std::vector<Board> SUCS;
 std::vector<Board> CLOSED;
 
 Board BESTNODE;
-Board S;
+Board SUCCESSOR;
 
 Board board1;
 Board board2;
@@ -26,7 +26,7 @@ void AStarAlgorithm(Board initial_board, void(*heuristic))
     Set CLOSED to the empty list.
     */
     OPEN.push_back(initial_board);
-    bool Goal_Node = false;
+    bool goalNodeFound = false;
     //(2) Until a goal node is found, repeat the following procudure
     /*If there are no nodes on OPEN, report failure. Otherwise, pick the node on OPEN with the lowest f’ value.
     Call it BESTNODE. Remove it from OPEN. Place it on CLOSED. See if BESTNODE is a goal node.
@@ -34,7 +34,7 @@ void AStarAlgorithm(Board initial_board, void(*heuristic))
     created between the initial state and BESTNODE if we are interested in the path). Otherwise, generate the successors of BESTNODE.
     For each such SUCCESSOR, do the following:
     */
-    while (!Goal_Node)
+    while (!goalNodeFound)
     {
 
         // If there are no nodes on OPEN, report failure.
@@ -74,12 +74,14 @@ void AStarAlgorithm(Board initial_board, void(*heuristic))
         else
         {
             // Otherwise, generate the successors of BESTNODE. For each such SUCCESSOR, do the following:
+            // TODO:
+            //      generate successors
             //(a) Set BESTNODE to point to SUCCESSOR
-            BESTNODE.setChild(SUCCESSOR, 1);
+            BESTNODE.setChild(&SUCCESSOR, 1);
 
             //(b) Compute g(SUCCESSOR) = g(BESTNODE) + the cost of getting from BESTNODE to SUCCESSOR and f'(SUCCESSOR) + h(SUCCESSOR)
             //Or use a certain heurisitc function
-           SUCCESSOR.setFn(heurisitc(SUCCESSOR));
+           SUCCESSOR.setFn(heurisitc(&SUCCESSOR));
             //(i) See if SUCCESSOR is the same as any node on OPEN
             /*(i.e., It has already been generated but not processed). If so, call that node OLD. Since this node already exists in the graph,
             we can throw SUCCESSOR away and add OLD to the list of BESTNODE's successors. Now we must decide whether OLD's parent link should
