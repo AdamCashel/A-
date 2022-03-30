@@ -35,17 +35,18 @@ void Board::setFn(int FnVal){
     Fn_Value = FnVal;
 }
 
-bool operator==(const Board &temp1, const Board &temp2)
+const bool operator==(const Board &temp1, const Board &temp2) 
 {
-    return(temp1.getBoardArray() == temp2.getBoard());
+    return(temp1.getBoardArray() == temp2.getBoardArray());
 }
 
 int Board::getFn(){
     return Fn_Value;
 }
 
-Tile* Board::getBoardArray(){
-    return board;
+Tile* Board::getBoardArray() const {
+    Tile *ptr = this->board;
+    return ptr;
 }
 
 

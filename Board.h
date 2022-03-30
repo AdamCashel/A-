@@ -21,16 +21,22 @@ class Board{
         void setFn(int);
         int getFn();
 
-        Board::~Board(){}
+       
 
-        bool operator==(const Board);
+        Board()
+        {
+            this.setParent(nullptr);
+            this.setChild(nullptr);
+        }
 
-        Tile* getBoardArray();
+        const bool operator==(const Board);
+
+        Tile* getBoardArray() const ;
         
         vector<Board*> getChildren();
 
-        Board(const Board &temp) {board[0] = temp.board[0], board[1] = temp.board[1],
-        board[2] = temp.board[2], board[3] = temp.board[3], board[4] = temp.board[4], board[5] = temp.board[5],
-        board[6] = temp.board[6], board[7] = temp.board[7], board[8] = temp.board[8], 
-        parent = temp.parent, children = temp.children, Fn_Value = temp.Fn_Value;}
+        Board(const Board &temp) {board[0] = temp->board[0], board[1] = temp->board[1],
+        board[2] = temp->board[2], board[3] = temp->board[3], board[4] = temp->board[4], board[5] = temp->board[5],
+        board[6] = temp->board[6], board[7] = temp->board[7], board[8] = temp->board[8], 
+        parent = temp->parent, children = temp->children, Fn_Value = temp->Fn_Value;}
 };
