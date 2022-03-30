@@ -6,8 +6,10 @@ using namespace std;
 Board::Board(){};
 
 Board::Board(const Board* otherBoard){
-    for(int i = 0; i < BOARD_SIZE; i++){
-        board[i] = otherBoard->board[i];
+    for(int i = 0; i < BOARD_ROWS; i++){
+        for(int j = 0; j < BOARD_COLS; j++){
+            board[i][j] = otherBoard->board[i][j];
+        }
     }
 
     children = otherBoard->children;
@@ -15,12 +17,12 @@ Board::Board(const Board* otherBoard){
 }
 
 
-void Board::setTile(Tile tile, int index){
-    board[index] = tile;
+void Board::setTile(Tile tile, int row, int col){
+    board[row][col] = tile;
 }
 
-Tile Board::getTile(int index){
-    return board[index];
+Tile Board::getTile(int row, int col){
+    return board[row][col];
 }
 
 void Board::setParent(Board* parent){
@@ -29,6 +31,10 @@ void Board::setParent(Board* parent){
 
 Board* Board::getParent(){
     return parent;
+}
+
+void Board::addChild(Board* child){
+    children.push_back(child);
 }
 
 void Board::setChild(Board* child, int index){
@@ -47,23 +53,19 @@ void Board::setFn(int FnVal){
     Fn_Value = FnVal;
 }
 
+int Board::getFn(){
+    return Fn_Value;
+}
+
 const bool operator==(Board &board1, Board &board2) 
 {
-    for(int i = 0; i < BOARD_SIZE; i++){
-        if(board1.getBoardArray()[i].currentPosition() != board2.getBoardArray()[i].currentPosition()){
-            return false;
+    for(int i = 0; i < BOARD_ROWS; i++){
+        for(int j = 0; j < BOARD_COLS; i++){
+            if(board1.getTile(i, j).currentPosition() != board2.getTile(i, j).currentPosition()){
+                return false;
+            }
         }
     }
     
     return true;
 }
-
-int Board::getFn(){
-    return Fn_Value;
-}
-
-Tile* Board::getBoardArray(){
-    return board;
-}
-
-
