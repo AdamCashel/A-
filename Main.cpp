@@ -116,6 +116,9 @@ void AStarAlgorithm(Board initial_board, void(*heuristic))
 
 int main()
 {
+    // create goal board
+    createGoalBoard(&goalBoard);
+
     // Regular A* Heuristic function: f(n) = g(n) + h1(n)
     createBoard1(&board1);
     ET_Start();
