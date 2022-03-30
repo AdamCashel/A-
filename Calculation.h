@@ -1,3 +1,4 @@
+#pragma once
 #include "Board.h"
 #include "Tile.h"
 #include <time.h>
@@ -10,13 +11,9 @@ clock_t timer;
 
 void getGoalPath(Board);
 
-bool check_goal(Board, Board);
-
 int h1_value(Board);
 
 int g_value(Board);
-
-Board createBoard(Board);
 
 Board lowest_fvalue(std::vector<Board>);
 

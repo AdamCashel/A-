@@ -7,20 +7,11 @@
 void getGoalPath(Board found_goal)
 {
     std::vector<Board> Path;
-    while(!found_goal.getParent() != NULL)
+    while(found_goal.getParent() != nullptr)
     {
         Path.push_back(found_goal);
-        found_goal = found_goal.getParent();
+        found_goal = *found_goal.getParent();
     }
-}
-
-
-//Checks if Board node is goal node through the comparision of board array
-bool check_goal(Board treeBoard, Board goalBoard){
-    if(treeBoard.getBoardArray() == goalBoard.getBoardArray()){
-        return true;
-    }
-    return false;
 }
 
 //Gets h1(n) value of Board 
@@ -28,7 +19,7 @@ int h1_value(Board treeBoard)
 {
     int F_Val = 0;
 
-    for(int i = 0; i < 9; i++)
+    for(int i = 0; i < BOARD_SIZE; i++)
     {
         if(goalBoard.getTile(i).currentPosition() != treeBoard.getTile(i).currentPosition())
         {
@@ -42,9 +33,6 @@ int g_value(Board){
 
 }
 
-Board createBoard(Board){
-
-}
 
 Board lowest_fvalue(vector<Board> open_array){
     Board temp;
