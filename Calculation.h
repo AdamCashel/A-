@@ -3,6 +3,8 @@
 #include "Tile.h"
 #include <time.h>
 
+using namespace std;
+
 Board goalBoard;
 
 int statistics_table[6][6];
@@ -15,7 +17,9 @@ int h1_value(Board);
 
 int g_value(Board);
 
-Board lowest_fvalue(std::vector<Board>);
+Board lowest_fvalue(vector<Board>);
+
+void generateSuccessors(Board*);
 
 //ET, NG, NE, D, bStar, TP, Number of Run
 void CreateTable(double, int, int, int, double, int, int);
