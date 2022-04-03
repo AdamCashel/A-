@@ -11,6 +11,12 @@ int statistics_table[6][6];
 
 clock_t timer;
 
+int nodes_gen = 0;
+
+int nodes_expanded = 0;
+
+
+
 void getGoalPath(Board);
 
 int h1_value(Board);
@@ -30,12 +36,25 @@ void ET_Start();
 
 double ET_End();
 
-int NG(Board);
+void start_nodes_generated(); //Start nodes-gen = 0;
+void NG(); //Nodes generated
+int Nodes_generated_total(); //return nodes gen
 
-int NE();
+void start_nodes_expanded();
+void NE(); //Nodes Expanded
+int Nodes_expanded();
 
-int D();
+int D(); //Depth of tree
 
-double bStar();
+double bStar(); //Effective branching factor b*
 
-int TP();
+int TP(); //Total Path
+
+//Print tables for each 2 initial states with 5 equations with 6 numbers
+void CreateTable1();
+
+void createTable2();
+
+void printTable1();
+
+void printTable2();

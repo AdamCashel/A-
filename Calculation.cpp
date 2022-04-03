@@ -2,7 +2,7 @@
 #include "Board.h"
 #include <vector>
 #include <time.h>
-
+#include <cmath>
 
 void getGoalPath(Board found_goal)
 {
@@ -31,7 +31,8 @@ int h1_value(Board treeBoard)
 }
 
 int g_value(Board){
-
+    int dummy = 1;
+    return dummy;
 }
 
 
@@ -143,23 +144,51 @@ void ET_Start(){
 
 double ET_End(){
     double total_time = clock() - timer;
+    return total_time;
 }
 
-int NG(Board){
-
+void start_nodes_generated()
+{
+    nodes_gen = 0;
 }
 
-int NE(){
-
+void NG(){
+    nodes_gen++;
 }
+
+int Nodes_generated_total()
+{
+    return nodes_gen;
+}
+
+void start_nodes_expanded()
+{
+    nodes_expanded++;
+}
+
+void NE()
+{
+    nodes_expanded++;
+}
+
+int Nodes_expanded()
+{
+    return nodes_expanded;
+}
+
 int D(){
-
+    int dummy = 1;
+    return dummy;
 }
 
-double bStar(){
-
+double bStar(Board goalNode){
+    //bStar EQ: N^(1/D), where N = Total nodes processed, D = Depth at which solution was found
+    int N = Nodes_expanded();
+    int D = goalNode.getG();
+    int bstar = pow(N,(1/D));
 }
 
 int TP(){
-
+    int dummy = 1;
+    return dummy;
 }

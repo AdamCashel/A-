@@ -170,11 +170,15 @@ int main()
 
     // Regular A* Heuristic function: f(n) = g(n) + h1(n)
     createBoard1(&board1);
+    start_nodes_generated();
     ET_Start();
     AStarAlgorithm(board1, &AStar_heuristic);
     ET_End();
-
+    
     // Total Cost Search Heuristic function
     createBoard2(&board2);
+    start_nodes_generated();
+    ET_Start();
     AStarAlgorithm(board2, &AStar_heuristic);
+    ET_End();
 }
