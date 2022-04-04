@@ -142,8 +142,8 @@ void ET_Start(){
     timer = clock();
 }
 
-double ET_End(){
-    double total_time = clock() - timer;
+float ET_End(){
+    float total_time = clock() - timer;
     return total_time;
 }
 
@@ -191,4 +191,44 @@ double bStar(Board goalNode){
 int TP(){
     int dummy = 1;
     return dummy;
+}
+
+void dataArr(int index, string numb, int arrayNumb, int EQ_numb)
+{
+    if(arrayNumb == 1)
+    {
+        data_arr1[EQ_numb][index] = numb;
+    }
+    else if(arrayNumb == 2)
+    {
+         data_arr2[EQ_numb][index] = numb;
+    }
+    else
+    {
+        cout << "ERROR dataArr()" << endl;
+    }
+}
+
+void printTable1()
+{
+    cout << "Initial State #1:" << endl;
+    cout << "-----------------------------------------------------------------------------------------" << endl;
+    cout << "|    Heuristic Function    |    ET    |    NG    |    NE    |    D    |    b*    |    TP    |" << endl;
+    cout << "|    A*                    |" << data_arr1[0][0] << "  " << data_arr1[0][1] << "  " << data_arr1[0][2] << "  " << data_arr1[0][3] << "  " << data_arr1[0][4] << "  " << data_arr1[0][5] << "  " << data_arr1[0][6] << "|" << endl;
+    cout << "|    Total Cost           |" << data_arr1[1][0] << "  " << data_arr1[1][1] << "  " << data_arr1[1][2] << "  " << data_arr1[1][3] << "  " << data_arr1[1][4] << "  " << data_arr1[1][5] << "  " << data_arr1[1][6] << "|" << endl;
+    cout << "|    Greedy              |" << data_arr1[2][0] << "  " << data_arr1[2][1] << "  " << data_arr1[2][2] << "  " << data_arr1[2][3] << "  " << data_arr1[2][4] << "  " << data_arr1[2][5] << "  " << data_arr1[2][6] << "|" << endl;
+    cout << "|    Adams Heuristic       |" << data_arr1[3][0] << "  " << data_arr1[3][1] << "  " << data_arr1[3][2] << "  " << data_arr1[3][3] << "  " << data_arr1[3][4] << "  " << data_arr1[3][5] << "  " << data_arr1[3][6] << "|" << endl;
+    cout << "|    Isaac Heuristic        |" << data_arr1[4][0] << "  " << data_arr1[4][1] << "  " << data_arr1[4][2] << "  " << data_arr1[4][3] << "  " << data_arr1[4][4] << "  " << data_arr1[4][5] << "  " << data_arr1[4][6] << "|" << endl;
+}
+
+void printTable2()
+{
+    cout << "Initial State #1:" << endl;
+    cout << "-----------------------------------------------------------------------------------------" << endl;
+    cout << "|    Heuristic Function    |    ET    |    NG    |    NE    |    D    |    b*    |    TP    |" << endl;
+    cout << "|    A*                    |" << data_arr2[0][0] << "  " << data_arr2[0][1] << "  " << data_arr2[0][2] << "  " << data_arr1[0][3] << "  " << data_arr1[0][4] << "  " << data_arr1[0][5] << "  " << data_arr1[0][6] << "|" << endl;
+    cout << "|    Total Cost           |" << data_arr2[1][0] << "  " << data_arr2[1][1] << "  " << data_arr2[1][2] << "  " << data_arr1[1][3] << "  " << data_arr1[1][4] << "  " << data_arr1[1][5] << "  " << data_arr1[1][6] << "|" << endl;
+    cout << "|    Greedy              |" << data_arr2[2][0] << "  " << data_arr2[2][1] << "  " << data_arr2[2][2] << "  " << data_arr1[2][3] << "  " << data_arr1[2][4] << "  " << data_arr1[2][5] << "  " << data_arr1[2][6] << "|" << endl;
+    cout << "|    Adams Heuristic       |" << data_arr2[3][0] << "  " << data_arr2[3][1] << "  " << data_arr2[3][2] << "  " << data_arr1[3][3] << "  " << data_arr1[3][4] << "  " << data_arr1[3][5] << "  " << data_arr1[3][6] << "|" << endl;
+    cout << "|    Isaac Heuristic        |" << data_arr2[4][0] << "  " << data_arr2[4][1] << "  " << data_arr2[4][2] << "  " << data_arr1[4][3] << "  " << data_arr1[4][4] << "  " << data_arr1[4][5] << "  " << data_arr1[4][6] << "|" << endl;
 }

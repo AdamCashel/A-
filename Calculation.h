@@ -1,13 +1,14 @@
 #pragma once
+#include <iostream>
 #include "Board.h"
 #include "Tile.h"
 #include <time.h>
-
+#include <string>
 using namespace std;
 
 Board goalBoard;
 
-int statistics_table[6][6];
+int statistics_table[5][6];
 
 clock_t timer;
 
@@ -15,7 +16,11 @@ int nodes_gen = 0;
 
 int nodes_expanded = 0;
 
+string data_arr1[5][6]; //Write data into array then read for creating table1
 
+string data_arr2[5][6]; //Write data into array then read for creating table2
+
+void dataArr(int, string, int, int);
 
 void getGoalPath(Board);
 
@@ -34,7 +39,7 @@ void CreateTable(double, int, int, int, double, int, int);
 
 void ET_Start();
 
-double ET_End();
+float ET_End();
 
 void start_nodes_generated(); //Start nodes-gen = 0;
 void NG(); //Nodes generated
@@ -51,9 +56,6 @@ double bStar(); //Effective branching factor b*
 int TP(); //Total Path
 
 //Print tables for each 2 initial states with 5 equations with 6 numbers
-void CreateTable1();
-
-void createTable2();
 
 void printTable1();
 

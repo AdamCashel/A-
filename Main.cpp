@@ -168,17 +168,103 @@ int main()
     // create goal board
     createGoalBoard(&goalBoard);
 
+    //Intial State1
     // Regular A* Heuristic function: f(n) = g(n) + h1(n)
     createBoard1(&board1);
     start_nodes_generated();
     ET_Start();
     AStarAlgorithm(board1, &AStar_heuristic);
-    ET_End();
+    float float_temp = ET_End();
+    string string_temp = to_string(float_temp);
+    dataArr(0, string_temp, 1, 0);
     
-    // Total Cost Search Heuristic function
-    createBoard2(&board2);
+    // Greedy Search Heuristic function
+    createBoard1(&board2);
+    start_nodes_generated();
+    ET_Start();
+    AStarAlgorithm(board1, &Greedy_heuristic);
+    float float_temp = ET_End();
+    string string_temp = to_string(float_temp);
+    dataArr(0, string_temp, 1, 1);
+
+    // Total Search Heuristic function
+    createBoard1(&board2);
+    start_nodes_generated();
+    ET_Start();
+    AStarAlgorithm(board1, &Total_heuristic);
+    float float_temp = ET_End();
+    string string_temp = to_string(float_temp);
+    dataArr(0, string_temp, 1, 2);
+
+    // Total Search Heuristic function
+    createBoard1(&board2);
+    start_nodes_generated();
+    ET_Start();
+    AStarAlgorithm(board1, &Adam_heuristic);
+    float float_temp = ET_End();
+    string string_temp = to_string(float_temp);
+    dataArr(0, string_temp, 1, 3);
+
+    // Total Search Heuristic function
+    createBoard1(&board2);
+    start_nodes_generated();
+    ET_Start();
+    AStarAlgorithm(board1, &Isaac_heuristic);
+    float float_temp = ET_End();
+    string string_temp = to_string(float_temp);
+    dataArr(0, string_temp, 1, 4);
+
+
+
+    //Intial State2
+    // Regular A* Heuristic function: f(n) = g(n) + h1(n)
+    createBoard1(&board2);
     start_nodes_generated();
     ET_Start();
     AStarAlgorithm(board2, &AStar_heuristic);
-    ET_End();
+    float float_temp = ET_End();
+    string string_temp = to_string(float_temp);
+    dataArr(0, string_temp, 2, 0);
+    
+    // Greedy Search Heuristic function
+    createBoard1(&board2);
+    start_nodes_generated();
+    ET_Start();
+    AStarAlgorithm(board2, &Greedy_heuristic);
+    float float_temp = ET_End();
+    string string_temp = to_string(float_temp);
+    dataArr(0, string_temp, 2, 1);
+
+    // Total Search Heuristic function
+    createBoard1(&board2);
+    start_nodes_generated();
+    ET_Start();
+    AStarAlgorithm(board2, &Total_heuristic);
+    float float_temp = ET_End();
+    string string_temp = to_string(float_temp);
+    dataArr(0, string_temp, 2, 2);
+
+    // Total Search Heuristic function
+    createBoard1(&board2);
+    start_nodes_generated();
+    ET_Start();
+    AStarAlgorithm(board2, &Adam_heuristic);
+    float float_temp = ET_End();
+    string string_temp = to_string(float_temp);
+    dataArr(0, string_temp, 2, 3);
+
+    // Total Search Heuristic function
+    createBoard1(&board2);
+    start_nodes_generated();
+    ET_Start();
+    AStarAlgorithm(board2, &Isaac_heuristic);
+    float float_temp = ET_End();
+    string string_temp = to_string(float_temp);
+    dataArr(0, string_temp, 2, 4);
+
+    //Print Initial State Tables
+    printTable1();
+    cout << endl << endl;
+    printTable2();
+
 }
