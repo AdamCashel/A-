@@ -34,6 +34,9 @@ void generateSuccessors(Board*);
 
 void reorderByFn(vector<Board>);
 
+void propogateSuccessors(Board*);
+
+
 //ET, NG, NE, D, bStar, TP, Number of Run
 void CreateTable(double, int, int, int, double, int, int);
 

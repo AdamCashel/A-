@@ -134,6 +134,16 @@ void reorderByFn(vector<Board> list){
     }
 }
 
+void propogateSuccessors(Board* OLD){
+    // TODO: check if path is equivalent or better than the
+    for(Board* child : OLD->getChildren()){
+        child->setG(OLD->getG() + 1);
+        child->setFn(h1_value(*child) + child->getG());
+
+        propogateSuccessors(child);
+    }
+}
+
 void CreateTable(double, int, int, int, double, int, int){
 
 }
