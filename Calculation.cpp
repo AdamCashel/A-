@@ -1,5 +1,4 @@
 #include "Calculation.h"
-#include "Board.h"
 #include <vector>
 #include <time.h>
 #include <cmath>
@@ -14,21 +13,6 @@ void getGoalPath(Board found_goal)
     }
 }
 
-//Gets h1(n) value of Board 
-int h1_value(Board treeBoard)
-{
-    int F_Val = 0;
-
-    for(int i = 0; i < BOARD_ROWS; i++)
-    {
-        for(int j = 0; j < BOARD_COLS; j++){
-            if(goalBoard.getTile(i, j).currentPosition() != treeBoard.getTile(i, j).currentPosition()){
-                F_Val++;
-            }
-        }
-    }
-    return F_Val;
-}
 
 int g_value(Board){
     int dummy = 1;
@@ -140,12 +124,12 @@ void propagateSuccessors(Board* OLD){
         if(child->getParent() == OLD){
             child->setG(OLD->getG() + 1);
             // this is the same as the heuristic function
-            child->setFn(h1_value(*child) + child->getG());
+            child->setFn(child->getH() + child->getG());
 
             propagateSuccessors(child);
         }
         else {
-            int newPathValue = (OLD->getG() + 1) + h1_value(*child);
+            int newPathValue = (OLD->getG() + 1) + child->getH();
             // current path is better
             if(child->getFn() < newPathValue){
                 
@@ -156,7 +140,7 @@ void propagateSuccessors(Board* OLD){
 
                 child->setG(OLD->getG() + 1);
                 // this is the same as the heuristic function
-                child->setFn(h1_value(*child) + child->getG());
+                child->setFn(child->getH() + child->getG());
 
                 propagateSuccessors(child);
             }

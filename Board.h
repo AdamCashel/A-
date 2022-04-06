@@ -1,10 +1,11 @@
-#include "Tile.h"
-#include <vector>
 #pragma once
 
-extern const int BOARD_SIZE = 9;
-extern const int BOARD_ROWS = 3;
-extern const int BOARD_COLS = 3;
+#include <vector>
+#include "Tile.h"
+
+const int BOARD_SIZE = 9;
+const int BOARD_ROWS = 3;
+const int BOARD_COLS = 3;
 
 class Board{
     private:
@@ -36,6 +37,11 @@ class Board{
         void setG(int);
         int getG();
 
+        void setToGoalBoard();
+        bool compareToGoalBoard();
+
+        int getH();
+
         const bool operator==(Board);
-        
+              
 };

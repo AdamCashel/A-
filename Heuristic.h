@@ -1,5 +1,6 @@
 #pragma once
-#include "Board.h"
+#include "Calculation.h"
+
 
 void AStar_heuristic(Board*);
 

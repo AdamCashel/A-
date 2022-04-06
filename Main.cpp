@@ -67,7 +67,7 @@ void AStarAlgorithm(Board initial_board, void(*heuristic)(Board*))
 
         // See if BESTNODE is a goal node.  If so, exit and report a solution (either BESTNODE if all we want is the
         // node or the path that has been created between the initial state and BESTNODE if we are interested in the path)
-        if (BESTNODE == goalBoard)
+        if (BESTNODE.compareToGoalBoard())
         {
             // Goal node is found
             std::cout << "GOAL FOUND" << std::endl;
@@ -208,9 +208,6 @@ void AStarAlgorithm(Board initial_board, void(*heuristic)(Board*))
 
 int main()
 {
-    // create goal board
-    createGoalBoard(&goalBoard);
-    
     // analytics variables
     float float_temp;
     string string_temp;

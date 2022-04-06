@@ -1,5 +1,4 @@
 #include "Heuristic.h"
-#include "Calculation.h"
 
 using namespace std;
 
@@ -8,7 +7,7 @@ void AStar_heuristic(Board* board){
     board->setG(board->getParent()->getG() + 1);
 
     // set Fn of SUCCESSOR
-    board->setFn(h1_value(board) + board->getG());
+    board->setFn(board->getH() + board->getG());
 }
 
 void Greedy_heuristic(Board* board){
@@ -16,7 +15,7 @@ void Greedy_heuristic(Board* board){
     board->setG(board->getParent()->getG() + 1);
 
     // set Fn of SUCCESSOR
-    board->setFn(h1_value(board));
+    board->setFn(board->getH());
 }
 
 void Total_heuristic(Board* board){
@@ -24,7 +23,7 @@ void Total_heuristic(Board* board){
     board->setG(board->getParent()->getG() + 1);
 
     // set Fn of SUCCESSOR
-    board->setFn(h1_value(board));
+    board->setFn(board->getH());
 }
 
 void Adam_heuristic(Board* board)
@@ -33,7 +32,7 @@ void Adam_heuristic(Board* board)
     board->setG(board->getParent()->getG() + 1);
 
     // set Fn of SUCCESSOR
-    board->setFn((3 * h1_value(board)) + (2 * board->getG()));
+    board->setFn((3 * board->getH()) + (2 * board->getG()));
 }
 
 void Isaac_heuristic(Board* boar)

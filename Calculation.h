@@ -1,12 +1,9 @@
 #pragma once
-#include <iostream>
-#include "Board.h"
-#include "Tile.h"
-#include <time.h>
 #include <string>
-using namespace std;
+#include "Board.h"
+#include "Initialize.h"
 
-Board goalBoard;
+using namespace std;
 
 int statistics_table[5][6];
 
@@ -23,8 +20,6 @@ string data_arr2[5][6]; //Write data into array then read for creating table2
 void dataArr(int, string, int, int);
 
 void getGoalPath(Board);
-
-int h1_value(Board);
 
 int g_value(Board);
 
