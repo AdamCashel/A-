@@ -134,13 +134,33 @@ void reorderByFn(vector<Board> list){
     }
 }
 
-void propogateSuccessors(Board* OLD){
+void propagateSuccessors(Board* OLD){
     // TODO: check if path is equivalent or better than the
     for(Board* child : OLD->getChildren()){
-        child->setG(OLD->getG() + 1);
-        child->setFn(h1_value(*child) + child->getG());
+        if(child->getParent() == OLD){
+            child->setG(OLD->getG() + 1);
+            // this is the same as the heuristic function
+            child->setFn(h1_value(*child) + child->getG());
 
-        propogateSuccessors(child);
+            propagateSuccessors(child);
+        }
+        else {
+            int newPathValue = (OLD->getG() + 1) + h1_value(*child);
+            // current path is better
+            if(child->getFn() < newPathValue){
+                
+            }
+            // new path is better
+            else {
+                child->setParent(OLD);
+
+                child->setG(OLD->getG() + 1);
+                // this is the same as the heuristic function
+                child->setFn(h1_value(*child) + child->getG());
+
+                propagateSuccessors(child);
+            }
+        }
     }
 }
 

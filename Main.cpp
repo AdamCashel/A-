@@ -147,11 +147,13 @@ void AStarAlgorithm(Board initial_board, void(*heuristic)(Board*))
             changing each node's g value (and thus also its f' value), terminating each branch when you reach
             either a node with no successors or a node to which an equivalent or better path has already been found. 
             
-            This condition is easy to check for. Each node's parent link points back to its best-known parent. As  we propagate down to a node, see if its parent points to the node we are
-            corning from. If so, continue the propagation. If not, then its g value already reflects the better path of which it is part. So, the propagation
-            may stop here. But it is possible that with the new value of g being propagated downward, the path we are following may become better than the
-            path through the current parent. So, compare the two. If the path through the current parent is still better, stop the propagation. If the path
-            we are propagating through is now better, reset the parent and continue propagation.
+            This condition is easy to check, for each node's parent link points back to its best-known parent.
+            As we propagate down to a node, see if its parent points to the node we are corning from. 
+            If so, continue the propagation. If not, then its g value already reflects the better path of which it is part.
+            So, the propagation may stop here. But it is possible that with the new value of g being propagated downward, 
+            the path we are following may become better than the path through the current parent. So, compare the two. 
+            If the path through the current parent is still better, stop the propagation.
+            If the path we are propagating through is now better, reset the parent and continue propagation.
             */
             if(!foundInOpenList){
                 for(index = 0; index < CLOSED.size(); index++){
@@ -187,8 +189,7 @@ void AStarAlgorithm(Board initial_board, void(*heuristic)(Board*))
 
                     reorderByFn(CLOSED);
                     
-                    propogateSuccessors(OLD);
-
+                    propagateSuccessors(OLD);
                 }
             }
             

@@ -34,7 +34,7 @@ void generateSuccessors(Board*);
 
 void reorderByFn(vector<Board>);
 
-void propogateSuccessors(Board*);
+void propagateSuccessors(Board*);
 
 
 //ET, NG, NE, D, bStar, TP, Number of Run
