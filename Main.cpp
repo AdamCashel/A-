@@ -1,11 +1,11 @@
-#include "Heuristic.h"
-#include "Calculation.h"
-#include "Tile.h"
-#include "Board.h"
-#include "Initialize.h"
 #include <string>
 #include <iostream>
 #include <vector>
+
+#include "Initialize.h"
+#include "Heuristic.h"
+#include "Calculation.h"
+
 
 std::vector<Board> OPEN;
 std::vector<Board> SUCS;
@@ -210,6 +210,10 @@ int main()
 {
     // create goal board
     createGoalBoard(&goalBoard);
+    
+    // analytics variables
+    float float_temp;
+    string string_temp;
 
     //Intial State1
     // Regular A* Heuristic function: f(n) = g(n) + h1(n)
@@ -217,8 +221,8 @@ int main()
     start_nodes_generated();
     ET_Start();
     AStarAlgorithm(board1, &AStar_heuristic);
-    float float_temp = ET_End();
-    string string_temp = to_string(float_temp);
+    float_temp = ET_End();
+    string_temp = to_string(float_temp);
     dataArr(0, string_temp, 1, 0);
     
     // Greedy Search Heuristic function
@@ -226,8 +230,8 @@ int main()
     start_nodes_generated();
     ET_Start();
     AStarAlgorithm(board1, &Greedy_heuristic);
-    float float_temp = ET_End();
-    string string_temp = to_string(float_temp);
+    float_temp = ET_End();
+    string_temp = to_string(float_temp);
     dataArr(0, string_temp, 1, 1);
 
     // Total Search Heuristic function
@@ -235,8 +239,8 @@ int main()
     start_nodes_generated();
     ET_Start();
     AStarAlgorithm(board1, &Total_heuristic);
-    float float_temp = ET_End();
-    string string_temp = to_string(float_temp);
+    float_temp = ET_End();
+    string_temp = to_string(float_temp);
     dataArr(0, string_temp, 1, 2);
 
     // Total Search Heuristic function
@@ -244,8 +248,8 @@ int main()
     start_nodes_generated();
     ET_Start();
     AStarAlgorithm(board1, &Adam_heuristic);
-    float float_temp = ET_End();
-    string string_temp = to_string(float_temp);
+    float_temp = ET_End();
+    string_temp = to_string(float_temp);
     dataArr(0, string_temp, 1, 3);
 
     // Total Search Heuristic function
@@ -253,8 +257,8 @@ int main()
     start_nodes_generated();
     ET_Start();
     AStarAlgorithm(board1, &Isaac_heuristic);
-    float float_temp = ET_End();
-    string string_temp = to_string(float_temp);
+    float_temp = ET_End();
+    string_temp = to_string(float_temp);
     dataArr(0, string_temp, 1, 4);
 
 
@@ -265,8 +269,8 @@ int main()
     start_nodes_generated();
     ET_Start();
     AStarAlgorithm(board2, &AStar_heuristic);
-    float float_temp = ET_End();
-    string string_temp = to_string(float_temp);
+    float_temp = ET_End();
+    string_temp = to_string(float_temp);
     dataArr(0, string_temp, 2, 0);
     
     // Greedy Search Heuristic function
@@ -274,8 +278,8 @@ int main()
     start_nodes_generated();
     ET_Start();
     AStarAlgorithm(board2, &Greedy_heuristic);
-    float float_temp = ET_End();
-    string string_temp = to_string(float_temp);
+    float_temp = ET_End();
+    string_temp = to_string(float_temp);
     dataArr(0, string_temp, 2, 1);
 
     // Total Search Heuristic function
@@ -283,8 +287,8 @@ int main()
     start_nodes_generated();
     ET_Start();
     AStarAlgorithm(board2, &Total_heuristic);
-    float float_temp = ET_End();
-    string string_temp = to_string(float_temp);
+    float_temp = ET_End();
+    string_temp = to_string(float_temp);
     dataArr(0, string_temp, 2, 2);
 
     // Total Search Heuristic function
@@ -292,8 +296,8 @@ int main()
     start_nodes_generated();
     ET_Start();
     AStarAlgorithm(board2, &Adam_heuristic);
-    float float_temp = ET_End();
-    string string_temp = to_string(float_temp);
+    float_temp = ET_End();
+    string_temp = to_string(float_temp);
     dataArr(0, string_temp, 2, 3);
 
     // Total Search Heuristic function
@@ -301,8 +305,8 @@ int main()
     start_nodes_generated();
     ET_Start();
     AStarAlgorithm(board2, &Isaac_heuristic);
-    float float_temp = ET_End();
-    string string_temp = to_string(float_temp);
+    float_temp = ET_End();
+    string_temp = to_string(float_temp);
     dataArr(0, string_temp, 2, 4);
 
     //Print Initial State Tables
