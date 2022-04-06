@@ -3,6 +3,18 @@
 #include <time.h>
 #include <cmath>
 
+int statistics_table[5][6];
+
+clock_t timer;
+
+int nodes_gen = 0;
+
+int nodes_expanded = 0;
+
+string data_arr1[5][6]; //Write data into array then read for creating table1
+
+string data_arr2[5][6]; //Write data into array then read for creating table2
+
 void getGoalPath(Board found_goal)
 {
     std::vector<Board> Path;
