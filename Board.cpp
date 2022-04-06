@@ -70,11 +70,11 @@ int Board::getG(){
     return g_value;
 }
 
-const bool operator==(Board &board1, Board &board2) 
+const bool Board::operator==(Board board)
 {
     for(int i = 0; i < BOARD_ROWS; i++){
         for(int j = 0; j < BOARD_COLS; i++){
-            if(board1.getTile(i, j).currentPosition() != board2.getTile(i, j).currentPosition()){
+            if(this->getTile(i, j).currentPosition() != board.getTile(i, j).currentPosition()){
                 return false;
             }
         }
