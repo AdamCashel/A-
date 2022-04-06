@@ -198,8 +198,9 @@ int D(){
 double bStar(Board goalNode){
     //bStar EQ: N^(1/D), where N = Total nodes processed, D = Depth at which solution was found
     int N = Nodes_expanded();
-    int D = goalNode.getG();
-    int bstar = pow(N,(1/D));
+    double D = goalNode.getG();
+    double bstar = pow(N,(1/D));
+    return bstar;
 }
 
 int TP(){

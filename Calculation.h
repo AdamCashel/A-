@@ -2,6 +2,8 @@
 #include <string>
 #include "Board.h"
 #include "Initialize.h"
+#include <time.h>
+#include <ctime>
 
 using namespace std;
 
