@@ -9,6 +9,8 @@ clock_t timer;
 
 int nodes_gen = 0;
 
+int deepest_depth = 0;
+
 int nodes_expanded = 0;
 
 string data_arr1[5][6]; //Write data into array then read for creating table1
@@ -60,7 +62,7 @@ void generateSuccessors(Board* BESTNODE){
             }
         }
     }
-
+    NE(); //Increases Node Expanded
     // 0 - top  1 - right
     // 2 - bottom 3 - left
     for(int attempt = 0; attempt < 4; attempt++){
@@ -77,6 +79,7 @@ void generateSuccessors(Board* BESTNODE){
                 newSuccessor->setTile(newSuccessor->getTile(box_row, box_col), box_row - 1, box_col);
                 newSuccessor->setTile(temp, box_row, box_col);
                 BESTNODE->addChild(newSuccessor);
+                NG();
             }
             break;
 
@@ -88,6 +91,7 @@ void generateSuccessors(Board* BESTNODE){
                 newSuccessor->setTile(newSuccessor->getTile(box_row, box_col), box_row, box_col + 1);
                 newSuccessor->setTile(temp, box_row, box_col);
                 BESTNODE->addChild(newSuccessor);
+                NG();
             }
             break;
 
@@ -99,6 +103,7 @@ void generateSuccessors(Board* BESTNODE){
                 newSuccessor->setTile(newSuccessor->getTile(box_row, box_col), box_row + 1, box_col);
                 newSuccessor->setTile(temp, box_row, box_col);
                 BESTNODE->addChild(newSuccessor);
+                NG();
             }
             break;
 
@@ -110,6 +115,7 @@ void generateSuccessors(Board* BESTNODE){
                 newSuccessor->setTile(newSuccessor->getTile(box_row, box_col), box_row, box_col - 1);
                 newSuccessor->setTile(temp, box_row, box_col);
                 BESTNODE->addChild(newSuccessor);
+                NG();
             }
             break;
         
@@ -139,6 +145,11 @@ void propagateSuccessors(Board* OLD){
             child->setFn(child->getH() + child->getG());
 
             propagateSuccessors(child);
+
+            //Check for new deepest node
+            if(child->getG() > get_d()){
+                set_d(child->getG());
+            }
         }
         else {
             int newPathValue = (OLD->getG() + 1) + child->getH();
@@ -155,6 +166,10 @@ void propagateSuccessors(Board* OLD){
                 child->setFn(child->getH() + child->getG());
 
                 propagateSuccessors(child);
+            }
+            //Check for new deepest node
+            if(child->getG() > get_d()){
+                set_d(child->getG());
             }
         }
     }
@@ -202,9 +217,16 @@ int Nodes_expanded()
     return nodes_expanded;
 }
 
-int D(){
-    int dummy = 1;
-    return dummy;
+void set_d(int depth){
+    deepest_depth = depth;
+}
+
+int get_d(){
+    return deepest_depth;
+}
+
+void start_d(){
+    deepest_depth = 0;
 }
 
 double bStar(Board goalNode){

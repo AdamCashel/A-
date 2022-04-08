@@ -37,7 +37,9 @@ void start_nodes_expanded();
 void NE(); //Nodes Expanded
 int Nodes_expanded();
 
-int D(); //Depth of tree
+void start_d(); //Set deepest_depth to 0
+int get_d(); // return deepest depth
+void set_d(int); //set deepest depth with new depth
 
 double bStar(); //Effective branching factor b*
 

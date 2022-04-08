@@ -211,17 +211,25 @@ int main()
     // analytics variables
     float float_temp;
     string string_temp;
+    int total_generated = 0;
 
     //Intial State1
     // Regular A* Heuristic function: f(n) = g(n) + h1(n)
     createBoard1(&board1);
     start_nodes_generated();
     ET_Start();
+    start_nodes_expanded();
     AStarAlgorithm(board1, &AStar_heuristic);
     float_temp = ET_End();
     string_temp = to_string(float_temp);
     dataArr(0, string_temp, 1, 0);
-    
+    total_generated = Nodes_generated_total();
+    string_temp = to_string(total_generated);
+    dataArr(1, string_temp, 1, 0);
+    total_generated = Nodes_expanded();
+    string_temp = to_string(total_generated);
+    dataArr(2, string_temp, 1, 0);
+
     // Greedy Search Heuristic function
     createBoard1(&board2);
     start_nodes_generated();
