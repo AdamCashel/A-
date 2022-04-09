@@ -41,10 +41,12 @@ void start_d(); //Set deepest_depth to 0
 int get_d(); // return deepest depth
 void set_d(int); //set deepest depth with new depth
 
-double bStar(); //Effective branching factor b*
+void bStar(Board); //Effective branching factor b*
+double get_bstar(); //return bstar
 
-int TP(); //Total Path
-
+void start_TP(); //set Total Path to 0
+void set_TP(Board); //set Total Path
+int get_TP(); //get Total Path
 //Print tables for each 2 initial states with 5 equations with 6 numbers
 
 void printTable1();

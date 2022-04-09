@@ -11,6 +11,10 @@ int nodes_gen = 0;
 
 int deepest_depth = 0;
 
+double bstar = 0;
+
+int total_path = 0;
+
 int nodes_expanded = 0;
 
 string data_arr1[5][6]; //Write data into array then read for creating table1
@@ -204,7 +208,7 @@ int Nodes_generated_total()
 
 void start_nodes_expanded()
 {
-    nodes_expanded++;
+    nodes_expanded = 0;
 }
 
 void NE()
@@ -229,17 +233,34 @@ void start_d(){
     deepest_depth = 0;
 }
 
-double bStar(Board goalNode){
+void bStar(Board goalNode){
     //bStar EQ: N^(1/D), where N = Total nodes processed, D = Depth at which solution was found
     int N = Nodes_expanded();
     double D = goalNode.getG();
-    double bstar = pow(N,(1/D));
+    bstar = pow(N,(1/D));
+}
+
+double get_bstar()
+{
     return bstar;
 }
 
-int TP(){
-    int dummy = 1;
-    return dummy;
+void start_TP()
+{
+    total_path = 0;
+}
+
+void set_setTP(Board node){
+    while(node.getParent() != nullptr)
+    {
+        total_path += node.getFn();
+        node = node.getParent();
+    }
+    total_path += node.getFn();
+}
+
+int get_TP(){
+    return total_path;
 }
 
 void dataArr(int index, string numb, int arrayNumb, int EQ_numb)

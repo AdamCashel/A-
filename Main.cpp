@@ -72,6 +72,7 @@ void AStarAlgorithm(Board initial_board, void(*heuristic)(Board*))
             // Goal node is found
             std::cout << "GOAL FOUND" << std::endl;
             getGoalPath(BESTNODE);
+            bStar(BESTNODE);
         }
         else
         {
@@ -212,24 +213,40 @@ int main()
     float float_temp;
     string string_temp;
     int total_generated = 0;
-
+    double total2_generated = 0;
     //Intial State1
     // Regular A* Heuristic function: f(n) = g(n) + h1(n)
     createBoard1(&board1);
     start_nodes_generated();
     ET_Start();
     start_nodes_expanded();
+    start_TP();
     AStarAlgorithm(board1, &AStar_heuristic);
     float_temp = ET_End();
     string_temp = to_string(float_temp);
     dataArr(0, string_temp, 1, 0);
+
     total_generated = Nodes_generated_total();
     string_temp = to_string(total_generated);
     dataArr(1, string_temp, 1, 0);
+
     total_generated = Nodes_expanded();
     string_temp = to_string(total_generated);
     dataArr(2, string_temp, 1, 0);
 
+    total_generated = get_d();
+    string_temp = to_string(total_generated);
+    dataArr(3, string_temp, 1, 0);
+
+    total2_generated = get_bstar();
+    string_temp = to_string(total2_generated);
+    dataArr(4, string_temp, 1, 0);
+
+    total_generated = get_TP();
+    string_temp = to_string(total_generated);
+    dataArr(5, string_temp, 1, 0);
+
+    /*
     // Greedy Search Heuristic function
     createBoard1(&board2);
     start_nodes_generated();
@@ -314,9 +331,9 @@ int main()
     string_temp = to_string(float_temp);
     dataArr(0, string_temp, 2, 4);
 
-    //Print Initial State Tables
+    //Print Initial State Tables */
     printTable1();
-    cout << endl << endl;
+    cout << std::endl << std::endl;
     printTable2();
 
 }
