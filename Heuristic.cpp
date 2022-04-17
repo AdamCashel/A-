@@ -7,7 +7,7 @@ void AStar_heuristic(Board* board){
     board->setG(board->getParent()->getG() + 1);
 
     // set Fn of SUCCESSOR
-    board->setFn(board->getH() + board->getG());
+    board->setFn(findHValue(board) + board->getG());
 }
 
 void Greedy_heuristic(Board* board){
@@ -15,7 +15,7 @@ void Greedy_heuristic(Board* board){
     board->setG(board->getParent()->getG() + 1);
 
     // set Fn of SUCCESSOR
-    board->setFn(board->getH());
+    board->setFn(findHValue(board));
 }
 
 void Total_heuristic(Board* board){
@@ -23,7 +23,7 @@ void Total_heuristic(Board* board){
     board->setG(board->getParent()->getG() + 1);
 
     // set Fn of SUCCESSOR
-    board->setFn(board->getH());
+    board->setFn(findHValue(board));
 }
 
 void Adam_heuristic(Board* board)
@@ -32,7 +32,7 @@ void Adam_heuristic(Board* board)
     board->setG(board->getParent()->getG() + 1);
 
     // set Fn of SUCCESSOR
-    board->setFn((3 * board->getH()) + (2 * board->getG()));
+    board->setFn((3 * findHValue(board)) + (2 * board->getG()));
 }
 
 void Isaac_heuristic(Board* boar)

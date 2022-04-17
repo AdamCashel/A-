@@ -1,23 +1,24 @@
 #include "Tile.h"
-#include <iostream>
+
 using namespace std;
 
-int Tile::currentPosition()
-{
-    return currentSpot;
+
+
+Tile::Tile(){
+    this->value = 0;
 }
 
-int Tile::goalPosition()
-{
-    return goalSpot;
+Tile::Tile(int value){
+    this->value = value;
 }
 
-void Tile::setPosition(int newPosition)
+
+void Tile::setValue(int value)
 {
-    currentSpot = newPosition;
+    this->value = value;
 }
 
-void Tile::setGoalPosition(int newGoalPosition)
+int Tile::getValue()
 {
-    goalSpot = newGoalPosition;
+    return value;
 }

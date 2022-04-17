@@ -7,20 +7,19 @@
 #include "Calculation.h"
 
 
-std::vector<Board> OPEN;
-std::vector<Board> SUCS;
-std::vector<Board> CLOSED;
+std::vector<Board*> OPEN;
+std::vector<Board*> SUCS;
+std::vector<Board*> CLOSED;
 
-Board BESTNODE;
-Board SUCCESSOR;
+Board* BESTNODE;
+Board* SUCCESSOR;
 
 Board board1;
 Board board2;
 
-void AStarAlgorithm(Board initial_board, void(*heuristic)(Board*))
+void AStarAlgorithm(Board* initial_board, void(*heuristic)(Board*))
 {
     int gValue = 0;
-
     // Start of A*
 
     //(1) Start with OPEN containing only the initial node
@@ -28,6 +27,7 @@ void AStarAlgorithm(Board initial_board, void(*heuristic)(Board*))
     Set CLOSED to the empty list.
     */
     OPEN.push_back(initial_board);
+
     bool goalNodeFound = false;
     //(2) Until a goal node is found, repeat the following procudure
     /*If there are no nodes on OPEN, report failure. Otherwise, pick the node on OPEN with the lowest f’ value.
@@ -50,158 +50,152 @@ void AStarAlgorithm(Board initial_board, void(*heuristic)(Board*))
         BESTNODE = lowest_fvalue(OPEN);
 
         // Remove it from OPEN.
-        int index = 0;
-        Board temp;
-        for (int i = 0; i < OPEN.size(); i++)
-        {
-            if (OPEN[i] == BESTNODE)
-            {
-                index = i;
-            }
-        }
-        temp = OPEN[index];
-        OPEN.erase(std::next(OPEN.begin(), index));
 
         // Place it on CLOSED.
-        CLOSED.push_back(temp);
+        CLOSED.push_back(BESTNODE);
 
         // See if BESTNODE is a goal node.  If so, exit and report a solution (either BESTNODE if all we want is the
         // node or the path that has been created between the initial state and BESTNODE if we are interested in the path)
-        if (BESTNODE.compareToGoalBoard())
+        printf("COMPARE TO GOAL BOARD\n");
+        if (compareToGoalBoard(BESTNODE))
         {
             // Goal node is found
             std::cout << "GOAL FOUND" << std::endl;
-            getGoalPath(BESTNODE);
-            bStar(BESTNODE);
+            BESTNODE->printBoard();
+            // getGoalPath(BESTNODE);
+            // bStar(BESTNODE);
+            return;
         }
         else
         {
             // Otherwise, generate the successors of BESTNODE. For each such SUCCESSOR, do the following:
-            generateSuccessors(&BESTNODE);
-            //(a) Set BESTNODE to point to SUCCESSOR
-            BESTNODE.setChild(&SUCCESSOR, 0);
-
-            //(b) Compute g(SUCCESSOR) = g(BESTNODE) + the cost of getting from BESTNODE to SUCCESSOR and f'(SUCCESSOR) + h(SUCCESSOR)
-            //Or use a certain heurisitc function
-            // heuristic function will calculate the Fn value and set it in the SUCCESSOR
-            heuristic(&SUCCESSOR);
-
-
-            int index = 0;
-            bool foundInOpenList = false;
-            bool foundInClosedList = false;
-            //(i) See if SUCCESSOR is the same as any node on OPEN
-            /*(i.e., It has already been generated but not processed). If so, call that node OLD. Since this node already exists in the graph,
-            we can throw SUCCESSOR away and add OLD to the list of BESTNODE's successors. Now we must decide whether OLD's parent link should
-            be reset to point to BESTNODE. It should be if the path we have  just found to SUCCESSOR is cheaper than the current best path to
-            OLD (since SUCCESSOR and OLD are really the same node). So, see whether it is cheaper to get to the OLD via its current parent or
-            to SUCCESSOR via BESTNODE by comparing their g values. If OLD is cheaper (or just as cheap), then we need do nothing. If SUCCESSOR
-            is cheaper, then reset OLD's parent link to point to BESTNODE, record the new cheaper path in g(OLD), and update f’(OLD). Add SUCCESSOR
-            to open and re-oder open on the bases of f values.
-            */
+            generateSuccessors(BESTNODE);
             
-            for(index = 0; index < OPEN.size(); index++){
-                if(SUCCESSOR == OPEN[index]){
-                    // add the old node in open that is the same as the successor to the list of BESTNODE's successors
-                    foundInOpenList = true;
-                    break;
-                }
-            }
+            for(int i = 0; i < BESTNODE->getChildren().size(); i++){
+                //(a) Set BESTNODE to point to SUCCESSOR
+                SUCCESSOR = BESTNODE->getChild(i);
+
+                //(b) Compute g(SUCCESSOR) = g(BESTNODE) + the cost of getting from BESTNODE to SUCCESSOR and f'(SUCCESSOR) + h(SUCCESSOR)
+                // Or use a certain heurisitc function
+                // heuristic function will calculate the Fn value and set it in the SUCCESSOR
+                heuristic(SUCCESSOR);
 
 
-            // OLD == OPEN[index]
-            if(foundInOpenList){
-                BESTNODE.addChild(&OPEN[index]);
-
-                if(OPEN[index].getG() <= SUCCESSOR.getG()){
-                    continue;
-                }
-                else{
-                    // reset OLD's parent link to BESTNODE
-                    OPEN[index].setParent(&BESTNODE);
-
-                    // TODO: record the new cheaper path
-                    OPEN[index].setG(SUCCESSOR.getG());
-
-                    // update f-value
-                    heuristic(&OPEN[index]);
-
-                    // add successor to open list
-                    OPEN.push_back(SUCCESSOR);
-
-                    reorderByFn(OPEN);
-                }
-            }
-
-            //(ii) If SUCCESSOR was not on OPEN, see if it is on CLOSED
-            /*
-            If so, call the node on CLOSED OLD and add OLD to the list of BESTNODE's successors. Check to see if the new path or the old path is
-            better. If OLD’s path is better, Ignore the SUCCESSOR.; otherwise, just as in step 2(c), and set the parent link-and g and f’ values
-            appropriately. [reset OLD's parent link to point to BESTNODE, record the new cheaper path in g(OLD), and update f’(OLD). Add SUCCESSOR
-            to open and re-oder open on the bases of f values.] 
-
-            If we have just found a better path to OLD, we must propagate the improvement to OLD's
-            successors. This is a bit tricky. OLD points to its successors. Each successor in turn points to its successors, and so forth, until each
-            branch terminates with a node that either is still on OPEN or has no successors.
-             
-            So, to propagate the new cost downward, do a depth-first traversal of the tree starting at OLD,
-            changing each node's g value (and thus also its f' value), terminating each branch when you reach
-            either a node with no successors or a node to which an equivalent or better path has already been found. 
-            
-            This condition is easy to check, for each node's parent link points back to its best-known parent.
-            As we propagate down to a node, see if its parent points to the node we are corning from. 
-            If so, continue the propagation. If not, then its g value already reflects the better path of which it is part.
-            So, the propagation may stop here. But it is possible that with the new value of g being propagated downward, 
-            the path we are following may become better than the path through the current parent. So, compare the two. 
-            If the path through the current parent is still better, stop the propagation.
-            If the path we are propagating through is now better, reset the parent and continue propagation.
-            */
-            if(!foundInOpenList){
-                for(index = 0; index < CLOSED.size(); index++){
-                    if(SUCCESSOR == CLOSED[index]){
-                        foundInClosedList = true;
+                int index = 0;
+                bool foundInOpenList = false;
+                bool foundInClosedList = false;
+                //(i) See if SUCCESSOR is the same as any node on OPEN
+                /*(i.e., It has already been generated but not processed). If so, call that node OLD. Since this node already exists in the graph,
+                we can throw SUCCESSOR away and add OLD to the list of BESTNODE's successors. Now we must decide whether OLD's parent link should
+                be reset to point to BESTNODE. It should be if the path we have  just found to SUCCESSOR is cheaper than the current best path to
+                OLD (since SUCCESSOR and OLD are really the same node). So, see whether it is cheaper to get to the OLD via its current parent or
+                to SUCCESSOR via BESTNODE by comparing their g values. If OLD is cheaper (or just as cheap), then we need do nothing. If SUCCESSOR
+                is cheaper, then reset OLD's parent link to point to BESTNODE, record the new cheaper path in g(OLD), and update f’(OLD). Add SUCCESSOR
+                to open and re-oder open on the bases of f values.
+                */
+                
+                for(index = 0; index < OPEN.size(); index++){
+                    if(*SUCCESSOR == OPEN[index]){
+                        // add the old node in open that is the same as the successor to the list of BESTNODE's successors
+                        foundInOpenList = true;
                         break;
                     }
                 }
-            }
 
-            // OLD == CLOSED[index]
-            // since we need OLD after the CLOSED list is reordered
-            // we will create a reference Board to it
-            if(foundInClosedList){
-                Board* OLD = &CLOSED[index];
 
-                BESTNODE.addChild(OLD);
-                
-                if(CLOSED[index].getG() <= SUCCESSOR.getG()){
-                    continue;
-                } else {
-                    // reset OLD's parent link to BESTNODE
-                    OLD->setParent(&BESTNODE);
+                // OLD == OPEN[index]
+                if(foundInOpenList){
+                    BESTNODE->addChild(OPEN[index]);
 
-                    // TODO: record the new cheaper path (update G value)
-                    OLD->setG(SUCCESSOR.getG());
+                    if(OPEN[index]->getG() <= SUCCESSOR->getG()){
+                        continue;
+                    }
+                    else{
+                        // reset OLD's parent link to BESTNODE
+                        OPEN[index]->setParent(BESTNODE);
 
-                    // update f-value
-                    heuristic(OLD);
+                        // TODO: record the new cheaper path
+                        OPEN[index]->setG(SUCCESSOR->getG());
 
-                    // add successor to open list
-                    CLOSED.push_back(SUCCESSOR);
+                        // update f-value
+                        heuristic(OPEN[index]);
 
-                    reorderByFn(CLOSED);
-                    
-                    propagateSuccessors(OLD);
+                        // add successor to open list
+                        OPEN.push_back(SUCCESSOR);
+
+                        reorderByFn(OPEN);
+                    }
                 }
-            }
-            
 
-            //(iii) If SUCCESSOR was not already on either OPEN or CLOSED
-            /*Point SUCCESSOR to BESTNODE and put it on OPEN. Re-order states on OPEN by f values.
-             */
-            if(!foundInOpenList && !foundInClosedList){
-                SUCCESSOR.setParent(&BESTNODE);
-                OPEN.push_back(SUCCESSOR);
-                reorderByFn(OPEN);
+                //(ii) If SUCCESSOR was not on OPEN, see if it is on CLOSED
+                /*
+                If so, call the node on CLOSED OLD and add OLD to the list of BESTNODE's successors. Check to see if the new path or the old path is
+                better. If OLD’s path is better, Ignore the SUCCESSOR.; otherwise, just as in step 2(c), and set the parent link-and g and f’ values
+                appropriately. [reset OLD's parent link to point to BESTNODE, record the new cheaper path in g(OLD), and update f’(OLD). Add SUCCESSOR
+                to open and re-oder open on the bases of f values.] 
+
+                If we have just found a better path to OLD, we must propagate the improvement to OLD's
+                successors. This is a bit tricky. OLD points to its successors. Each successor in turn points to its successors, and so forth, until each
+                branch terminates with a node that either is still on OPEN or has no successors.
+                
+                So, to propagate the new cost downward, do a depth-first traversal of the tree starting at OLD,
+                changing each node's g value (and thus also its f' value), terminating each branch when you reach
+                either a node with no successors or a node to which an equivalent or better path has already been found. 
+                
+                This condition is easy to check, for each node's parent link points back to its best-known parent.
+                As we propagate down to a node, see if its parent points to the node we are corning from. 
+                If so, continue the propagation. If not, then its g value already reflects the better path of which it is part.
+                So, the propagation may stop here. But it is possible that with the new value of g being propagated downward, 
+                the path we are following may become better than the path through the current parent. So, compare the two. 
+                If the path through the current parent is still better, stop the propagation.
+                If the path we are propagating through is now better, reset the parent and continue propagation.
+                */
+                if(!foundInOpenList){
+                    for(index = 0; index < CLOSED.size(); index++){
+                        if(*SUCCESSOR == CLOSED[index]){
+                            foundInClosedList = true;
+                            break;
+                        }
+                    }
+                }
+
+                // OLD == CLOSED[index]
+                // since we need OLD after the CLOSED list is reordered
+                // we will create a reference Board to it
+                if(foundInClosedList){
+                    Board* OLD = CLOSED[index];
+
+                    BESTNODE->addChild(OLD);
+                    
+                    if(CLOSED[index]->getG() <= SUCCESSOR->getG()){
+                        continue;
+                    } else {
+                        // reset OLD's parent link to BESTNODE
+                        OLD->setParent(BESTNODE);
+
+                        // TODO: record the new cheaper path (update G value)
+                        OLD->setG(SUCCESSOR->getG());
+
+                        // update f-value
+                        heuristic(OLD);
+
+                        // add successor to open list
+                        CLOSED.push_back(SUCCESSOR);
+
+                        reorderByFn(CLOSED);
+                        propagateSuccessors(OLD);
+                    }
+                }
+                
+
+                //(iii) If SUCCESSOR was not already on either OPEN or CLOSED
+                /*Point SUCCESSOR to BESTNODE and put it on OPEN. Re-order states on OPEN by f values.
+                */
+                if(!foundInOpenList && !foundInClosedList){
+                    SUCCESSOR->setParent(BESTNODE);
+                    OPEN.push_back(SUCCESSOR);
+                    reorderByFn(OPEN);
+                }
             }
         }
     }
@@ -217,11 +211,12 @@ int main()
     //Intial State1
     // Regular A* Heuristic function: f(n) = g(n) + h1(n)
     createBoard1(&board1);
+    createBoard2(&board2);
     start_nodes_generated();
     ET_Start();
     start_nodes_expanded();
     start_TP();
-    AStarAlgorithm(board1, &AStar_heuristic);
+    AStarAlgorithm(&board2, &AStar_heuristic);
     float_temp = ET_End();
     string_temp = to_string(float_temp);
     dataArr(0, string_temp, 1, 0);

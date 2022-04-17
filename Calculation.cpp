@@ -2,6 +2,8 @@
 #include <vector>
 #include <time.h>
 #include <cmath>
+#include <stdio.h>
+#include <iostream>
 
 int statistics_table[5][6];
 
@@ -12,7 +14,7 @@ int nodes_gen = 0;
 int deepest_depth = 0;
 
 double bstar = 0;
-
+ 
 int total_path = 0;
 
 int nodes_expanded = 0;
@@ -38,17 +40,10 @@ int g_value(Board){
 }
 
 
-Board lowest_fvalue(vector<Board> open_array){
-    Board temp;
-    int index = 0;
-    for(int i = 0; i < open_array.size(); i++){
-        if(temp.getFn() > open_array[i].getFn()){
-            index = i;
-            temp = open_array[i];
-        }
-    }
-    
-    open_array.erase(std::next(open_array.begin(), index));
+Board* lowest_fvalue(vector<Board*> &open_array){
+    reorderByFn(open_array);
+    Board* temp = open_array[0];
+    open_array = {open_array.begin() + 1, open_array.end()};
     return temp;
 }
 
@@ -60,29 +55,39 @@ void generateSuccessors(Board* BESTNODE){
 
     for(int i = 0; i < BOARD_ROWS; i++){
         for(int j = 0; j < BOARD_COLS; j++){
-            if(BESTNODE->getTile(i, j).currentPosition() == 9){
+            if(BESTNODE->getTile(i, j).getValue() == 9){
                 box_row = i;
                 box_col = j;
             }
         }
     }
+
+    printf("Printing Parent\n");
+    printf("H Value: %d\t G Value: %d\n", findHValue(BESTNODE), BESTNODE->getG());
+    BESTNODE->printBoard();
     NE(); //Increases Node Expanded
     // 0 - top  1 - right
     // 2 - bottom 3 - left
-    for(int attempt = 0; attempt < 4; attempt++){
+    int childCount = 1;
+    printf("row 1 col 1 value: %d\n", BESTNODE->getTile(0 ,0).getValue());
 
-        Board* newSuccessor(BESTNODE);
-        newSuccessor->setParent(BESTNODE);
+    for(int attempt = 0; attempt < 4; attempt++){
+        Board* newSuccessor = new Board(BESTNODE);
+        newSuccessor->setParent(BESTNODE);       
 
         switch (attempt){
         case 0:
             // if box is not in the top row
-            if(box_col != 0){
+            if(box_row != 0){
                 // swap box tile and tile above
                 Tile temp = newSuccessor->getTile(box_row - 1, box_col);
                 newSuccessor->setTile(newSuccessor->getTile(box_row, box_col), box_row - 1, box_col);
                 newSuccessor->setTile(temp, box_row, box_col);
                 BESTNODE->addChild(newSuccessor);
+                printf("Printing Child Node %d\n", childCount);
+                printf("H Value: %d\t G Value: %d\n", findHValue(newSuccessor), (newSuccessor->getG() + 1));
+                newSuccessor->printBoard();
+                childCount++;
                 NG();
             }
             break;
@@ -90,11 +95,15 @@ void generateSuccessors(Board* BESTNODE){
         case 1:
             // if box is not in the rightmost column
             if(box_col != 2){
-                // swap box tile and tile above
+                // swap box tile and tile on the right
                 Tile temp = newSuccessor->getTile(box_row, box_col + 1);
                 newSuccessor->setTile(newSuccessor->getTile(box_row, box_col), box_row, box_col + 1);
                 newSuccessor->setTile(temp, box_row, box_col);
                 BESTNODE->addChild(newSuccessor);
+                printf("Printing Child Node %d\n", childCount);
+                printf("H Value: %d\t G Value: %d\n", findHValue(newSuccessor), (newSuccessor->getG() + 1));
+                newSuccessor->printBoard();
+                childCount++;
                 NG();
             }
             break;
@@ -102,11 +111,15 @@ void generateSuccessors(Board* BESTNODE){
         case 2:
             // if box is not in the bottom row
             if(box_row != 2){
-                // swap box tile and tile above
+                // swap box tile and tile below
                 Tile temp = newSuccessor->getTile(box_row + 1, box_col);
                 newSuccessor->setTile(newSuccessor->getTile(box_row, box_col), box_row + 1, box_col);
                 newSuccessor->setTile(temp, box_row, box_col);
                 BESTNODE->addChild(newSuccessor);
+                printf("Printing Child Node %d\n", childCount);
+                printf("H Value: %d\t G Value: %d\n", findHValue(newSuccessor), (newSuccessor->getG() + 1));
+                newSuccessor->printBoard();
+                childCount++;
                 NG();
             }
             break;
@@ -114,11 +127,15 @@ void generateSuccessors(Board* BESTNODE){
         case 3:
             // if box is not in the leftmost column
             if(box_col != 0){
-                // swap box tile and tile above
+                // swap box tile and tile on the left
                 Tile temp = newSuccessor->getTile(box_row, box_col - 1);
                 newSuccessor->setTile(newSuccessor->getTile(box_row, box_col), box_row, box_col - 1);
                 newSuccessor->setTile(temp, box_row, box_col);
                 BESTNODE->addChild(newSuccessor);
+                printf("Printing Child Node %d\n", childCount);
+                printf("H Value: %d\t G Value: %d\n", findHValue(newSuccessor), (newSuccessor->getG() + 1));
+                newSuccessor->printBoard();
+                childCount++;
                 NG();
             }
             break;
@@ -130,10 +147,10 @@ void generateSuccessors(Board* BESTNODE){
 }
 
 
-void reorderByFn(vector<Board> list){
+void reorderByFn(vector<Board*> &list){
     for(int i = 0; i < list.size(); i++){
         for(int j = i + 1; j < list.size(); j++){
-            if(list[i].getFn() > list[j].getFn()){
+            if(list[i]->getFn() > list[j]->getFn()){
                 swap(list[i], list[j]);
             }
         }
@@ -146,7 +163,7 @@ void propagateSuccessors(Board* OLD){
         if(child->getParent() == OLD){
             child->setG(OLD->getG() + 1);
             // this is the same as the heuristic function
-            child->setFn(child->getH() + child->getG());
+            child->setFn(findHValue(child) + child->getG());
 
             propagateSuccessors(child);
 
@@ -156,7 +173,7 @@ void propagateSuccessors(Board* OLD){
             }
         }
         else {
-            int newPathValue = (OLD->getG() + 1) + child->getH();
+            int newPathValue = (OLD->getG() + 1) + findHValue(child);
             // current path is better
             if(child->getFn() < newPathValue){
                 
@@ -167,7 +184,7 @@ void propagateSuccessors(Board* OLD){
 
                 child->setG(OLD->getG() + 1);
                 // this is the same as the heuristic function
-                child->setFn(child->getH() + child->getG());
+                child->setFn(findHValue(child) + child->getG());
 
                 propagateSuccessors(child);
             }
@@ -177,6 +194,36 @@ void propagateSuccessors(Board* OLD){
             }
         }
     }
+}
+
+bool compareToGoalBoard(Board* board){
+    Board goalBoard = createGoalBoard();
+    for(int i = 0; i < BOARD_ROWS; i++){
+        for(int j = 0; j < BOARD_COLS; j++){
+            if(board->getTile(i, j).getValue() != goalBoard.getTile(i, j).getValue()){
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+int findHValue(Board* board){
+    int hValue = 0;
+    Board goalBoard = createGoalBoard();
+
+    for(int i = 0; i < BOARD_ROWS; i++){
+        for(int j = 0; j < BOARD_COLS; j++){
+            if(board->getTile(i, j).getValue() != 9){
+                if(board->getTile(i, j).getValue() != goalBoard.getTile(i, j).getValue()){
+                    hValue++;
+                }
+            }
+        }
+    }
+
+    return hValue;
 }
 
 void CreateTable(double, int, int, int, double, int, int){

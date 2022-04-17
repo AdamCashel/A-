@@ -1,20 +1,19 @@
+#pragma once
 #include <iostream>
 using namespace std;
-#pragma once
 
 class Tile{
 
     public:
-        int currentPosition();
 
-        int goalPosition();
+        Tile();
 
-        void setPosition(int);
+        Tile(int);
 
-        void setGoalPosition(int);
+        int getValue();
+
+        void setValue(int);
 
     private:
-        int currentSpot;
-
-        int goalSpot;
+        int value;
 };

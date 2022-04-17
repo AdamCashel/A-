@@ -18,7 +18,7 @@ class Board{
     public:
         Board();
 
-        Board(const Board*);
+        Board(Board*);
 
         void setTile(Tile, int, int);
         Tile getTile(int, int);
@@ -29,6 +29,7 @@ class Board{
         void addChild(Board*);
         void setChild(Board*, int);
         Board* getChild(int);
+
         vector<Board*> getChildren();
 
         void setFn(int);
@@ -37,11 +38,10 @@ class Board{
         void setG(int);
         int getG();
 
-        void setToGoalBoard();
-        bool compareToGoalBoard();
-
         int getH();
 
         const bool operator==(Board);
+
+        void printBoard();
               
 };

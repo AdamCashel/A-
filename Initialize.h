@@ -4,3 +4,5 @@
 void createBoard1(Board*);
 
 void createBoard2(Board*);
+
+Board createGoalBoard();

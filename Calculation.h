@@ -13,14 +13,17 @@ void getGoalPath(Board);
 
 int g_value(Board);
 
-Board lowest_fvalue(vector<Board>);
+Board* lowest_fvalue(vector<Board*> &);
 
 void generateSuccessors(Board*);
 
-void reorderByFn(vector<Board>);
+void reorderByFn(vector<Board*>&);
 
 void propagateSuccessors(Board*);
 
+bool compareToGoalBoard(Board*);
+
+int findHValue(Board*); 
 
 //ET, NG, NE, D, bStar, TP, Number of Run
 void CreateTable(double, int, int, int, double, int, int);
