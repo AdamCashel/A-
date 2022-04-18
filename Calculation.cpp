@@ -48,7 +48,7 @@ Board* lowest_fvalue(vector<Board*> &open_array){
 }
 
 
-void generateSuccessors(Board* BESTNODE){
+int generateSuccessors(Board* BESTNODE, int& boardNum){
     // Attempt to create successor for all 4 possible box locations
     // 9 == box symbol
     int box_row, box_col;
@@ -62,14 +62,14 @@ void generateSuccessors(Board* BESTNODE){
         }
     }
 
-    printf("Printing Parent\n");
-    printf("H Value: %d\t G Value: %d\n", findHValue(BESTNODE), BESTNODE->getG());
-    BESTNODE->printBoard();
+    // printf("Printing Parent\n");
+    // printf("Board Number: %d\t H Value: %d\t G Value: %d\n", ++boardNum, findHValue(BESTNODE), BESTNODE->getG());
+    //BESTNODE->printBoard();
     NE(); //Increases Node Expanded
     // 0 - top  1 - right
     // 2 - bottom 3 - left
     int childCount = 1;
-    printf("row 1 col 1 value: %d\n", BESTNODE->getTile(0 ,0).getValue());
+    // printf("row 1 col 1 value: %d\n", BESTNODE->getTile(0 ,0).getValue());
 
     for(int attempt = 0; attempt < 4; attempt++){
         Board* newSuccessor = new Board(BESTNODE);
@@ -84,9 +84,9 @@ void generateSuccessors(Board* BESTNODE){
                 newSuccessor->setTile(newSuccessor->getTile(box_row, box_col), box_row - 1, box_col);
                 newSuccessor->setTile(temp, box_row, box_col);
                 BESTNODE->addChild(newSuccessor);
-                printf("Printing Child Node %d\n", childCount);
-                printf("H Value: %d\t G Value: %d\n", findHValue(newSuccessor), (newSuccessor->getG() + 1));
-                newSuccessor->printBoard();
+                // printf("Printing Child Node %d\n", childCount);
+                // printf("Board Number: %d\t H Value: %d\t G Value: %d\n", ++boardNum, findHValue(newSuccessor), (newSuccessor->getG() + 1));
+                //newSuccessor->printBoard();
                 childCount++;
                 NG();
             }
@@ -100,9 +100,9 @@ void generateSuccessors(Board* BESTNODE){
                 newSuccessor->setTile(newSuccessor->getTile(box_row, box_col), box_row, box_col + 1);
                 newSuccessor->setTile(temp, box_row, box_col);
                 BESTNODE->addChild(newSuccessor);
-                printf("Printing Child Node %d\n", childCount);
-                printf("H Value: %d\t G Value: %d\n", findHValue(newSuccessor), (newSuccessor->getG() + 1));
-                newSuccessor->printBoard();
+                // printf("Printing Child Node %d\n", childCount);
+                // printf("Board Number: %d\t H Value: %d\t G Value: %d\n", ++boardNum, findHValue(newSuccessor), (newSuccessor->getG() + 1));
+                //newSuccessor->printBoard();
                 childCount++;
                 NG();
             }
@@ -116,9 +116,9 @@ void generateSuccessors(Board* BESTNODE){
                 newSuccessor->setTile(newSuccessor->getTile(box_row, box_col), box_row + 1, box_col);
                 newSuccessor->setTile(temp, box_row, box_col);
                 BESTNODE->addChild(newSuccessor);
-                printf("Printing Child Node %d\n", childCount);
-                printf("H Value: %d\t G Value: %d\n", findHValue(newSuccessor), (newSuccessor->getG() + 1));
-                newSuccessor->printBoard();
+                // printf("Printing Child Node %d\n", childCount);
+                // printf("Board Number: %d\t H Value: %d\t G Value: %d\n", ++boardNum, findHValue(newSuccessor), (newSuccessor->getG() + 1));
+                //newSuccessor->printBoard();
                 childCount++;
                 NG();
             }
@@ -132,9 +132,9 @@ void generateSuccessors(Board* BESTNODE){
                 newSuccessor->setTile(newSuccessor->getTile(box_row, box_col), box_row, box_col - 1);
                 newSuccessor->setTile(temp, box_row, box_col);
                 BESTNODE->addChild(newSuccessor);
-                printf("Printing Child Node %d\n", childCount);
-                printf("H Value: %d\t G Value: %d\n", findHValue(newSuccessor), (newSuccessor->getG() + 1));
-                newSuccessor->printBoard();
+                // // printf("Printing Child Node %d\n", childCount);
+                // // printf("Board Number: %d\t H Value: %d\t G Value: %d\n", ++boardNum, findHValue(newSuccessor), (newSuccessor->getG() + 1));
+                //newSuccessor->printBoard();
                 childCount++;
                 NG();
             }
@@ -144,6 +144,7 @@ void generateSuccessors(Board* BESTNODE){
             break;
         }
     }
+        return (childCount - 1);
 }
 
 
@@ -206,6 +207,17 @@ bool compareToGoalBoard(Board* board){
         }
     }
 
+    return true;
+}
+
+bool compareBoards(Board* board1, Board* board2){
+    for(int i = 0; i < BOARD_ROWS; i++){
+        for(int j = 0; j < BOARD_COLS; j++){
+            if(board1->getTile(i, j).getValue() != board2->getTile(i, j).getValue()){
+                return false;
+            }
+        }
+    }
     return true;
 }
 

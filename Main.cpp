@@ -17,6 +17,8 @@ Board* SUCCESSOR;
 Board board1;
 Board board2;
 
+int boardNum = 0;
+
 void AStarAlgorithm(Board* initial_board, void(*heuristic)(Board*))
 {
     int gValue = 0;
@@ -56,7 +58,7 @@ void AStarAlgorithm(Board* initial_board, void(*heuristic)(Board*))
 
         // See if BESTNODE is a goal node.  If so, exit and report a solution (either BESTNODE if all we want is the
         // node or the path that has been created between the initial state and BESTNODE if we are interested in the path)
-        printf("COMPARE TO GOAL BOARD\n");
+        // printf("COMPARE TO GOAL BOARD\n");
         if (compareToGoalBoard(BESTNODE))
         {
             // Goal node is found
@@ -69,9 +71,10 @@ void AStarAlgorithm(Board* initial_board, void(*heuristic)(Board*))
         else
         {
             // Otherwise, generate the successors of BESTNODE. For each such SUCCESSOR, do the following:
-            generateSuccessors(BESTNODE);
+            int numGenerated = generateSuccessors(BESTNODE, boardNum);
             
-            for(int i = 0; i < BESTNODE->getChildren().size(); i++){
+            for(int i = 0; i < numGenerated; i++){
+                // printf("i: %d\n", i);
                 //(a) Set BESTNODE to point to SUCCESSOR
                 SUCCESSOR = BESTNODE->getChild(i);
 
@@ -94,23 +97,29 @@ void AStarAlgorithm(Board* initial_board, void(*heuristic)(Board*))
                 to open and re-oder open on the bases of f values.
                 */
                 
+                // printf("OPEN LIST SIZE: %ld\n", OPEN.size());
                 for(index = 0; index < OPEN.size(); index++){
-                    if(*SUCCESSOR == OPEN[index]){
+                    if(compareBoards(SUCCESSOR, OPEN[index])){
                         // add the old node in open that is the same as the successor to the list of BESTNODE's successors
                         foundInOpenList = true;
+                        // printf("SUCCESSOR found in OPEN list\n");
                         break;
                     }
                 }
 
-
                 // OLD == OPEN[index]
                 if(foundInOpenList){
+                    // printf("Found in open list\n");
+
                     BESTNODE->addChild(OPEN[index]);
 
                     if(OPEN[index]->getG() <= SUCCESSOR->getG()){
+                        // printf("OLD IS BETTER\n");
                         continue;
                     }
                     else{
+                        // printf("SUCCESSOR IS BETTER\n");
+
                         // reset OLD's parent link to BESTNODE
                         OPEN[index]->setParent(BESTNODE);
 
@@ -163,6 +172,8 @@ void AStarAlgorithm(Board* initial_board, void(*heuristic)(Board*))
                 // since we need OLD after the CLOSED list is reordered
                 // we will create a reference Board to it
                 if(foundInClosedList){
+                    // printf("Found in closed list\n");
+
                     Board* OLD = CLOSED[index];
 
                     BESTNODE->addChild(OLD);
@@ -216,7 +227,7 @@ int main()
     ET_Start();
     start_nodes_expanded();
     start_TP();
-    AStarAlgorithm(&board2, &AStar_heuristic);
+    AStarAlgorithm(&board2, &Greedy_heuristic);
     float_temp = ET_End();
     string_temp = to_string(float_temp);
     dataArr(0, string_temp, 1, 0);

@@ -19,7 +19,7 @@ Board::Board(Board* otherBoard){
         }
     }
 
-    children = otherBoard->getChildren();
+    //children = otherBoard->getChildren();
     Fn_Value = otherBoard->getFn();
     g_value = otherBoard->getG();
 }
