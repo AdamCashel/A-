@@ -23,7 +23,7 @@ void Total_heuristic(Board* board){
     board->setG(board->getParent()->getG() + 1);
 
     // set Fn of SUCCESSOR
-    board->setFn(findHValue(board));
+    board->setFn(findHValue(board) + board->getG());
 }
 
 void Adam_heuristic(Board* board)
