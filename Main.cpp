@@ -63,9 +63,11 @@ void AStarAlgorithm(Board* initial_board, void(*heuristic)(Board*))
         {
             // Goal node is found
             std::cout << "GOAL FOUND" << std::endl;
+            //set bStar
+            bStar(BESTNODE);
             BESTNODE->printBoard();
             // getGoalPath(BESTNODE);
-            // bStar(BESTNODE);
+             (BESTNODE);
             return;
         }
         else
@@ -227,6 +229,7 @@ int main()
     ET_Start();
     start_nodes_expanded();
     start_TP();
+    start_d();
     AStarAlgorithm(&board2, &AStar_heuristic);
     float_temp = ET_End();
     string_temp = to_string(float_temp);

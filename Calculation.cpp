@@ -144,6 +144,11 @@ int generateSuccessors(Board* BESTNODE, int& boardNum){
         default:
             break;
         }
+        //Check for new deepest node
+        if(BESTNODE->getG() + 1 > get_d()){
+            set_d(BESTNODE->getG() + 1);
+            cout << "SETTING G: " << get_d() << endl;
+        }
     }
         return (childCount - 1);
 }
@@ -169,10 +174,6 @@ void propagateSuccessors(Board* OLD){
 
             propagateSuccessors(child);
 
-            //Check for new deepest node
-            if(child->getG() > get_d()){
-                set_d(child->getG());
-            }
         }
         else {
             int newPathValue = (OLD->getG() + 1) + findHValue(child);
@@ -189,10 +190,6 @@ void propagateSuccessors(Board* OLD){
                 child->setFn(findHValue(child) + child->getG());
 
                 propagateSuccessors(child);
-            }
-            //Check for new deepest node
-            if(child->getG() > get_d()){
-                set_d(child->getG());
             }
         }
     }
