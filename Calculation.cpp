@@ -244,8 +244,8 @@ void ET_Start(){
     timer = clock();
 }
 
-float ET_End(){
-    float total_time = clock() - timer;
+int ET_End(){
+int total_time = clock() - timer;
     return total_time;
 }
 
@@ -336,6 +336,15 @@ void dataArr(int index, string numb, int arrayNumb, int EQ_numb)
     }
 }
 
+void analyze_setup()
+{
+    start_nodes_generated();
+    ET_Start();
+    start_nodes_expanded();
+    start_TP();
+    start_d();
+}
+
 void printTable1()
 {
     cout << "Initial State #1:" << endl;
@@ -350,7 +359,7 @@ void printTable1()
 
 void printTable2()
 {
-    cout << "Initial State #1:" << endl;
+    cout << "Initial State #2:" << endl;
     cout << "-----------------------------------------------------------------------------------------" << endl;
     cout << "|    Heuristic Function    |    ET    |    NG    |    NE    |    D    |    b*    |    TP    |" << endl;
     cout << "|    A*                    |" << data_arr2[0][0] << "  " << data_arr2[0][1] << "  " << data_arr2[0][2] << "  " << data_arr1[0][3] << "  " << data_arr1[0][4] << "  " << data_arr1[0][5] << "  " << data_arr1[0][6] << "|" << endl;

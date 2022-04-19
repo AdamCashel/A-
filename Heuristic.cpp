@@ -35,7 +35,12 @@ void Adam_heuristic(Board* board)
     board->setFn((3 * findHValue(board)) + (2 * board->getG()));
 }
 
-void Isaac_heuristic(Board* boar)
+void Isaac_heuristic(Board* board)
 {
+    //Temp
+       // calculate G(SUCCESSOR) 
+    board->setG(board->getParent()->getG() + 1);
 
+    // set Fn of SUCCESSOR
+    board->setFn((findHValue(board)) + (2 * board->getG()));
 }

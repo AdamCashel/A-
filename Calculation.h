@@ -13,6 +13,8 @@ void getGoalPath(Board);
 
 int g_value(Board);
 
+void analyze_setup();
+
 Board* lowest_fvalue(vector<Board*> &);
 
 int generateSuccessors(Board*, int &);
@@ -32,7 +34,7 @@ void CreateTable(double, int, int, int, double, int, int);
 
 void ET_Start();
 
-float ET_End();
+int ET_End();
 
 void start_nodes_generated(); //Start nodes-gen = 0;
 void NG(); //Nodes generated
