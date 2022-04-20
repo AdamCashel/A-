@@ -9,7 +9,9 @@ using namespace std;
 
 void dataArr(int, string, int, int);
 
-void getGoalPath(Board);
+void getGoalPath(Board*);
+
+int getTotalPathLen();
 
 int g_value(Board);
 

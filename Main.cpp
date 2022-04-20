@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <chrono>
 
 #include "Initialize.h"
 #include "Heuristic.h"
@@ -29,7 +30,6 @@ void AStarAlgorithm(Board* initial_board, void(*heuristic)(Board*))
     SUCCESSOR = nullptr;
     boardNum = 0;
 
-    int gValue = 0;
     // Start of A*
 
     //(1) Start with OPEN containing only the initial node
@@ -66,7 +66,6 @@ void AStarAlgorithm(Board* initial_board, void(*heuristic)(Board*))
 
         // See if BESTNODE is a goal node.  If so, exit and report a solution (either BESTNODE if all we want is the
         // node or the path that has been created between the initial state and BESTNODE if we are interested in the path)
-        printf("COMPARE TO GOAL BOARD\n");
         if (compareToGoalBoard(BESTNODE))
         {
             // Goal node is found
@@ -74,8 +73,7 @@ void AStarAlgorithm(Board* initial_board, void(*heuristic)(Board*))
             //set bStar
             bStar(BESTNODE);
             BESTNODE->printBoard();
-            // getGoalPath(BESTNODE);
-             (BESTNODE);
+            getGoalPath(BESTNODE);
             return;
         }
         else
@@ -84,7 +82,6 @@ void AStarAlgorithm(Board* initial_board, void(*heuristic)(Board*))
             int numGenerated = generateSuccessors(BESTNODE, boardNum);
             
             for(int i = 0; i < numGenerated; i++){
-                printf("i: %d\n", i);
                 //(a) Set BESTNODE to point to SUCCESSOR
                 SUCCESSOR = BESTNODE->getChild(i);
 
@@ -107,29 +104,23 @@ void AStarAlgorithm(Board* initial_board, void(*heuristic)(Board*))
                 to open and re-oder open on the bases of f values.
                 */
                 
-                printf("OPEN LIST SIZE: %ld\n", OPEN.size());
                 for(index = 0; index < OPEN.size(); index++){
                     if(compareBoards(SUCCESSOR, OPEN[index])){
                         // add the old node in open that is the same as the successor to the list of BESTNODE's successors
                         foundInOpenList = true;
-                        printf("SUCCESSOR found in OPEN list\n");
                         break;
                     }
                 }
 
                 // OLD == OPEN[index]
                 if(foundInOpenList){
-                    printf("Found in open list\n");
 
                     BESTNODE->addChild(OPEN[index]);
 
                     if(OPEN[index]->getG() <= SUCCESSOR->getG()){
-                        printf("OLD IS BETTER\n");
                         continue;
                     }
                     else{
-                        printf("SUCCESSOR IS BETTER\n");
-
                         // reset OLD's parent link to BESTNODE
                         OPEN[index]->setParent(BESTNODE);
 
@@ -182,7 +173,6 @@ void AStarAlgorithm(Board* initial_board, void(*heuristic)(Board*))
                 // since we need OLD after the CLOSED list is reordered
                 // we will create a reference Board to it
                 if(foundInClosedList){
-                    printf("Found in closed list\n");
 
                     Board* OLD = CLOSED[index];
 
@@ -229,13 +219,16 @@ int main()
     string string_temp;
     int total_generated = 0;
     double total2_generated = 0;
+
+    // create initial boards
     createBoard1(&board1);
     createBoard2(&board2);
 
     //Intial State1 Boards
     //(1) Regular A* Heuristic function: f(n) = g(n) + h1(n)
+    cout << "Running A* on Board 1" << endl;
     analyze_setup();
-    AStarAlgorithm(&board2, &AStar_heuristic);
+    AStarAlgorithm(&board1, &AStar_heuristic);
     time_temp = ET_End();
     string_temp = to_string(time_temp);
     dataArr(0, string_temp, 1, 0);
@@ -256,11 +249,13 @@ int main()
     string_temp = to_string(total2_generated);
     dataArr(4, string_temp, 1, 0);
 
-    total_generated = get_TP();
+    total_generated = getTotalPathLen();
     string_temp = to_string(total_generated);
     dataArr(5, string_temp, 1, 0);
-    /*
+    
+    
     //(2) Total Cost
+    cout << "Running Total Cost on Board 1" << endl;
     analyze_setup();
     AStarAlgorithm(&board1, &Total_heuristic);
     time_temp = ET_End();
@@ -288,6 +283,7 @@ int main()
     dataArr(5, string_temp, 1, 1);
 
     //(3) Regular Greedy
+    cout << "Running Greedy on Board 1" << endl;
     analyze_setup();
     AStarAlgorithm(&board1, &Greedy_heuristic);
     time_temp = ET_End();
@@ -315,6 +311,7 @@ int main()
     dataArr(5, string_temp, 1, 2);
 
     //(4) Adams Heuristic
+    cout << "Running Adam's Heuristic on Board 1" << endl;
     analyze_setup();
     AStarAlgorithm(&board1, &Adam_heuristic);
     time_temp = ET_End();
@@ -342,6 +339,7 @@ int main()
     dataArr(5, string_temp, 1, 3);
 
     //(5) Isaac Heurisitc
+    cout << "Running Isaac's on Board 1" << endl;
     analyze_setup();
     AStarAlgorithm(&board1, &Isaac_heuristic);
     time_temp = ET_End();
@@ -370,6 +368,7 @@ int main()
     
     //Intial State2 Boards
     //(1) Regular A* Heuristic function: f(n) = g(n) + h1(n)
+    cout << "Running A* on Board 2" << endl;
     analyze_setup();
     AStarAlgorithm(&board2, &AStar_heuristic);
     time_temp = ET_End();
@@ -395,8 +394,9 @@ int main()
     total_generated = get_TP();
     string_temp = to_string(total_generated);
     dataArr(5, string_temp, 2, 0);
-
+    
     //(2) Total Cost
+    cout << "Running Total Cost on Board 2" << endl;
     analyze_setup();
     AStarAlgorithm(&board2, &Total_heuristic);
     time_temp = ET_End();
@@ -424,6 +424,7 @@ int main()
     dataArr(5, string_temp, 2, 1);
 
     //(3) Regular Greedy
+    cout << "Running Greedy on Board 2" << endl;
     analyze_setup();
     AStarAlgorithm(&board2, &Greedy_heuristic);
     time_temp = ET_End();
@@ -451,6 +452,7 @@ int main()
     dataArr(5, string_temp, 2, 2);
 
     //(4) Adams Heuristic
+    cout << "Running Adam's Heuristic on Board 2" << endl;
     analyze_setup();
     AStarAlgorithm(&board2, &Adam_heuristic);
     time_temp = ET_End();
@@ -476,8 +478,9 @@ int main()
     total_generated = get_TP();
     string_temp = to_string(total_generated);
     dataArr(5, string_temp, 2, 3);
-
+/*
     //(5) Isaac Heurisitc
+    cout << "Running Isaac's on Board 2" << endl;
     analyze_setup();
     AStarAlgorithm(&board2, &Isaac_heuristic);
     time_temp = ET_End();
@@ -503,9 +506,10 @@ int main()
     total_generated = get_TP();
     string_temp = to_string(total_generated);
     dataArr(5, string_temp, 2, 4);
+*/
 
-
-    //Print Initial State Tables */
+    //Print Initial State Tables 
+    cout << std::endl << std::endl;
     printTable1();
     cout << std::endl << std::endl;
     printTable2();

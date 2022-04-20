@@ -4,10 +4,12 @@
 #include <cmath>
 #include <stdio.h>
 #include <iostream>
+#include <iomanip>
+#include <chrono>
 
 int statistics_table[5][6];
 
-clock_t timer;
+std::chrono::high_resolution_clock::time_point start;
 
 int nodes_gen = 0;
 
@@ -17,22 +19,39 @@ double bstar = 0;
  
 int total_path = 0;
 
+vector<Board> goalPath;
+
 int nodes_expanded = 0;
 
 string data_arr1[5][6]; //Write data into array then read for creating table1
 
 string data_arr2[5][6]; //Write data into array then read for creating table2
 
-void getGoalPath(Board found_goal)
+void getGoalPath(Board* board)
 {
-    std::vector<Board> Path;
-    while(found_goal.getParent() != nullptr)
+    goalPath.clear();
+    vector<Board> path;
+    path.push_back(*board);
+    Board* temp = board;
+    while(temp->getParent() != nullptr)
     {
-        Path.push_back(found_goal);
-        found_goal = *found_goal.getParent();
+        temp = temp->getParent();
+        path.push_back(*temp);
     }
+
+    // reverse path
+    vector<Board> rPath;
+    for(int i = path.size() - 1; i >= 0; i--){
+        rPath.push_back(path[i]);
+    }
+
+    goalPath = rPath;
+    total_path = (goalPath.size() - 1);
 }
 
+int getTotalPathLen(){
+    return total_path;
+}
 
 int g_value(Board){
     int dummy = 1;
@@ -62,15 +81,12 @@ int generateSuccessors(Board* BESTNODE, int& boardNum){
         }
     }
 
-    printf("Printing Parent\n");
-    printf("Board Number: %d\t H Value: %d\t G Value: %d\n", ++boardNum, findHValue(BESTNODE), BESTNODE->getG());
-    //BESTNODE->printBoard();
-    NE(); //Increases Node Expanded
+    //Increases Node Expanded
+    NE(); 
+    
     // 0 - top  1 - right
     // 2 - bottom 3 - left
     int childCount = 1;
-    printf("row 1 col 1 value: %d\n", BESTNODE->getTile(0 ,0).getValue());
-    BESTNODE->printBoard();
 
     for(int attempt = 0; attempt < 4; attempt++){
         Board* newSuccessor = new Board(BESTNODE);
@@ -85,9 +101,6 @@ int generateSuccessors(Board* BESTNODE, int& boardNum){
                 newSuccessor->setTile(newSuccessor->getTile(box_row, box_col), box_row - 1, box_col);
                 newSuccessor->setTile(temp, box_row, box_col);
                 BESTNODE->addChild(newSuccessor);
-                printf("Printing Child Node %d\n", childCount);
-                printf("Board Number: %d\t H Value: %d\t G Value: %d\n", ++boardNum, findHValue(newSuccessor), (newSuccessor->getG() + 1));
-                newSuccessor->printBoard();
                 childCount++;
                 NG();
             }
@@ -101,9 +114,6 @@ int generateSuccessors(Board* BESTNODE, int& boardNum){
                 newSuccessor->setTile(newSuccessor->getTile(box_row, box_col), box_row, box_col + 1);
                 newSuccessor->setTile(temp, box_row, box_col);
                 BESTNODE->addChild(newSuccessor);
-                printf("Printing Child Node %d\n", childCount);
-                printf("Board Number: %d\t H Value: %d\t G Value: %d\n", ++boardNum, findHValue(newSuccessor), (newSuccessor->getG() + 1));
-                newSuccessor->printBoard();
                 childCount++;
                 NG();
             }
@@ -117,9 +127,6 @@ int generateSuccessors(Board* BESTNODE, int& boardNum){
                 newSuccessor->setTile(newSuccessor->getTile(box_row, box_col), box_row + 1, box_col);
                 newSuccessor->setTile(temp, box_row, box_col);
                 BESTNODE->addChild(newSuccessor);
-                printf("Printing Child Node %d\n", childCount);
-                printf("Board Number: %d\t H Value: %d\t G Value: %d\n", ++boardNum, findHValue(newSuccessor), (newSuccessor->getG() + 1));
-                newSuccessor->printBoard();
                 childCount++;
                 NG();
             }
@@ -133,9 +140,6 @@ int generateSuccessors(Board* BESTNODE, int& boardNum){
                 newSuccessor->setTile(newSuccessor->getTile(box_row, box_col), box_row, box_col - 1);
                 newSuccessor->setTile(temp, box_row, box_col);
                 BESTNODE->addChild(newSuccessor);
-                printf("Printing Child Node %d\n", childCount);
-                printf("Board Number: %d\t H Value: %d\t G Value: %d\n", ++boardNum, findHValue(newSuccessor), (newSuccessor->getG() + 1));
-                newSuccessor->printBoard();
                 childCount++;
                 NG();
             }
@@ -147,7 +151,6 @@ int generateSuccessors(Board* BESTNODE, int& boardNum){
         //Check for new deepest node
         if(BESTNODE->getG() + 1 > get_d()){
             set_d(BESTNODE->getG() + 1);
-            cout << "SETTING G: " << get_d() << endl;
         }
     }
         return (childCount - 1);
@@ -240,13 +243,16 @@ void CreateTable(double, int, int, int, double, int, int){
 
 }
 
+
+
 void ET_Start(){
-    timer = clock();
+    start = std::chrono::high_resolution_clock::now();
 }
 
 int ET_End(){
-int total_time = clock() - timer;
-    return total_time;
+    
+    std::chrono::high_resolution_clock::duration total_time = std::chrono::high_resolution_clock::now() - start;
+    return std::chrono::duration_cast<std::chrono::microseconds>(total_time).count();
 }
 
 void start_nodes_generated()
@@ -292,9 +298,9 @@ void start_d(){
 
 void bStar(Board goalNode){
     //bStar EQ: N^(1/D), where N = Total nodes processed, D = Depth at which solution was found
-    int N = Nodes_expanded();
+    int N = Nodes_generated_total();
     double D = goalNode.getG();
-    bstar = pow(N,(1/D));
+    bstar = N / D;
 }
 
 double get_bstar()
@@ -317,6 +323,7 @@ void set_setTP(Board node){
 }
 
 int get_TP(){
+
     return total_path;
 }
 
@@ -350,11 +357,11 @@ void printTable1()
     cout << "Initial State #1:" << endl;
     cout << "-----------------------------------------------------------------------------------------" << endl;
     cout << "|    Heuristic Function    |    ET    |    NG    |    NE    |    D    |    b*    |    TP    |" << endl;
-    cout << "|    A*                    |" << data_arr1[0][0] << "  " << data_arr1[0][1] << "  " << data_arr1[0][2] << "  " << data_arr1[0][3] << "  " << data_arr1[0][4] << "  " << data_arr1[0][5] << "  " << data_arr1[0][6] << "|" << endl;
-    cout << "|    Total Cost           |" << data_arr1[1][0] << "  " << data_arr1[1][1] << "  " << data_arr1[1][2] << "  " << data_arr1[1][3] << "  " << data_arr1[1][4] << "  " << data_arr1[1][5] << "  " << data_arr1[1][6] << "|" << endl;
-    cout << "|    Greedy              |" << data_arr1[2][0] << "  " << data_arr1[2][1] << "  " << data_arr1[2][2] << "  " << data_arr1[2][3] << "  " << data_arr1[2][4] << "  " << data_arr1[2][5] << "  " << data_arr1[2][6] << "|" << endl;
-    cout << "|    Adams Heuristic       |" << data_arr1[3][0] << "  " << data_arr1[3][1] << "  " << data_arr1[3][2] << "  " << data_arr1[3][3] << "  " << data_arr1[3][4] << "  " << data_arr1[3][5] << "  " << data_arr1[3][6] << "|" << endl;
-    cout << "|    Isaac Heuristic        |" << data_arr1[4][0] << "  " << data_arr1[4][1] << "  " << data_arr1[4][2] << "  " << data_arr1[4][3] << "  " << data_arr1[4][4] << "  " << data_arr1[4][5] << "  " << data_arr1[4][6] << "|" << endl;
+    cout << "|    A*                    |" << setw(6) << data_arr1[0][0] << setw(11) << data_arr1[0][1] << setw(11) << data_arr1[0][2] << setw(11) << data_arr1[0][3] << setw(15) << data_arr1[0][4] << setw(7) << data_arr1[0][5] << "   |" << endl;
+    cout << "|    Total Cost            |" << setw(6) << data_arr1[1][0] << setw(11) << data_arr1[1][1] << setw(11) << data_arr1[1][2] << setw(11) << data_arr1[1][3] << setw(15) << data_arr1[1][4] << setw(7) << data_arr1[1][5] << "   |" << endl;
+    cout << "|    Greedy                |" << setw(6) << data_arr1[2][0] << setw(11) << data_arr1[2][1] << setw(11) << data_arr1[2][2] << setw(11) << data_arr1[2][3] << setw(15) << data_arr1[2][4] << setw(7) << data_arr1[2][5] << "   |" << endl;
+    cout << "|    Adam's Heuristic      |" << setw(6) << data_arr1[3][0] << setw(11) << data_arr1[3][1] << setw(11) << data_arr1[3][2] << setw(11) << data_arr1[3][3] << setw(15) << data_arr1[3][4] << setw(7) << data_arr1[3][5] << "   |" << endl;
+    cout << "|    Isaac's Heuristic     |" << setw(6) << data_arr1[4][0] << setw(11) << data_arr1[4][1] << setw(11) << data_arr1[4][2] << setw(11) << data_arr1[4][3] << setw(15) << data_arr1[4][4] << setw(7) << data_arr1[4][5] << "   |" << endl;
 }
 
 void printTable2()
@@ -362,9 +369,9 @@ void printTable2()
     cout << "Initial State #2:" << endl;
     cout << "-----------------------------------------------------------------------------------------" << endl;
     cout << "|    Heuristic Function    |    ET    |    NG    |    NE    |    D    |    b*    |    TP    |" << endl;
-    cout << "|    A*                    |" << data_arr2[0][0] << "  " << data_arr2[0][1] << "  " << data_arr2[0][2] << "  " << data_arr1[0][3] << "  " << data_arr1[0][4] << "  " << data_arr1[0][5] << "  " << data_arr1[0][6] << "|" << endl;
-    cout << "|    Total Cost           |" << data_arr2[1][0] << "  " << data_arr2[1][1] << "  " << data_arr2[1][2] << "  " << data_arr1[1][3] << "  " << data_arr1[1][4] << "  " << data_arr1[1][5] << "  " << data_arr1[1][6] << "|" << endl;
-    cout << "|    Greedy              |" << data_arr2[2][0] << "  " << data_arr2[2][1] << "  " << data_arr2[2][2] << "  " << data_arr1[2][3] << "  " << data_arr1[2][4] << "  " << data_arr1[2][5] << "  " << data_arr1[2][6] << "|" << endl;
-    cout << "|    Adams Heuristic       |" << data_arr2[3][0] << "  " << data_arr2[3][1] << "  " << data_arr2[3][2] << "  " << data_arr1[3][3] << "  " << data_arr1[3][4] << "  " << data_arr1[3][5] << "  " << data_arr1[3][6] << "|" << endl;
-    cout << "|    Isaac Heuristic        |" << data_arr2[4][0] << "  " << data_arr2[4][1] << "  " << data_arr2[4][2] << "  " << data_arr1[4][3] << "  " << data_arr1[4][4] << "  " << data_arr1[4][5] << "  " << data_arr1[4][6] << "|" << endl;
+    cout << "|    A*                    |" << setw(6) << data_arr2[0][0] << setw(11) << data_arr2[0][1] << setw(11) << data_arr2[0][2] << setw(11) << data_arr2[0][3] << setw(15) << data_arr2[0][4] << setw(7) << data_arr2[0][5] << "   |" << endl;
+    cout << "|    Total Cost            |" << setw(6) << data_arr2[1][0] << setw(11) << data_arr2[1][1] << setw(11) << data_arr2[1][2] << setw(11) << data_arr2[1][3] << setw(15) << data_arr2[1][4] << setw(7) << data_arr2[1][5] << "   |" << endl;
+    cout << "|    Greedy                |" << setw(6) << data_arr2[2][0] << setw(11) << data_arr2[2][1] << setw(11) << data_arr2[2][2] << setw(11) << data_arr2[2][3] << setw(15) << data_arr2[2][4] << setw(7) << data_arr2[2][5] << "   |" << endl;;
+    cout << "|    Adam's Heuristic      |" << setw(6) << data_arr2[3][0] << setw(11) << data_arr2[3][1] << setw(11) << data_arr2[3][2] << setw(11) << data_arr2[3][3] << setw(15) << data_arr2[3][4] << setw(7) << data_arr2[3][5] << "   |" << endl;
+    cout << "|    Isaac's Heuristic     |" << setw(6) << data_arr2[4][0] << setw(11) << data_arr2[4][1] << setw(11) << data_arr2[4][2] << setw(11) << data_arr2[4][3] << setw(15) << data_arr2[4][4] << setw(7) << data_arr2[4][5] << "   |" << endl;
 }
